@@ -1,0 +1,25 @@
+块: 476, 边: 757, 解析异常: 14
+未处理分支类型: 25
+  UNHANDLED:{"kind": "gosub", "target": "regard_update", "line": 2250}
+  UNHANDLED:{"kind": "if", "cond": {"raw": "%execution_cnt<=0", "logic": null, "terms": [{"var": "%execution_cnt", "op": "<=", "val": "0"}]}, "act": "gosub", "line": 9964, "target": "normal_effectspeed"
+  UNHANDLED:{"kind": "if", "cond": {"raw": "%execution_cnt<=0", "logic": null, "terms": [{"var": "%execution_cnt", "op": "<=", "val": "0"}]}, "act": "gosub", "line": 9966, "target": "openning"}
+  UNHANDLED:{"kind": "if", "cond": {"raw": "%execution_cnt>0", "logic": null, "terms": [{"var": "%execution_cnt", "op": ">", "val": "0"}]}, "act": "skip", "line": 9968, "skip": 6}
+  UNHANDLED:{"kind": "flag", "op": "mov", "var": "%4020", "val": "1", "line": 9969}
+  UNHANDLED:{"kind": "flag", "op": "mov", "var": "%4021", "val": "1", "line": 9970}
+  UNHANDLED:{"kind": "flag", "op": "mov", "var": "%4022", "val": "1", "line": 9971}
+  UNHANDLED:{"kind": "flag", "op": "mov", "var": "%4023", "val": "1", "line": 9972}
+  UNHANDLED:{"kind": "flag", "op": "mov", "var": "%4024", "val": "1", "line": 9973}
+  UNHANDLED:{"kind": "flag", "op": "inc", "var": "%execution_cnt", "val": "", "line": 9975}
+  UNHANDLED:{"kind": "if", "cond": {"raw": "%debugmode!=1", "logic": null, "terms": [{"var": "%debugmode", "op": "!=", "val": "1"}]}, "act": "skip", "line": 9977, "skip": 15}
+  UNHANDLED:{"kind": "if", "cond": {"raw": "%buttonno==0", "logic": null, "terms": [{"var": "%buttonno", "op": "==", "val": "0"}]}, "act": "skip", "line": 10020, "skip": -2}
+  UNHANDLED:{"kind": "if", "cond": {"raw": "%buttonno==-1", "logic": null, "terms": [{"var": "%buttonno", "op": "==", "val": "-1"}]}, "act": "skip", "line": 10021, "skip": -3}
+  UNHANDLED:{"kind": "if", "cond": {"raw": "%buttonno==2", "logic": null, "terms": [{"var": "%buttonno", "op": "==", "val": "2"}]}, "act": "gosub", "line": 10024, "target": "option"}
+  UNHANDLED:{"kind": "flag", "op": "mov", "var": "%buttonno", "val": "0", "line": 10024}
+  UNHANDLED:{"kind": "if", "cond": {"raw": "%buttonno==0", "logic": null, "terms": [{"var": "%buttonno", "op": "==", "val": "0"}]}, "act": "skip", "line": 10043, "skip": -2}
+  UNHANDLED:{"kind": "if", "cond": {"raw": "%buttonno==-1", "logic": null, "terms": [{"var": "%buttonno", "op": "==", "val": "-1"}]}, "act": "skip", "line": 10044, "skip": -3}
+  UNHANDLED:{"kind": "if", "cond": {"raw": "%buttonno==3", "logic": null, "terms": [{"var": "%buttonno", "op": "==", "val": "3"}]}, "act": "gosub", "line": 10048, "target": "option"}
+  UNHANDLED:{"kind": "flag", "op": "mov", "var": "%buttonno", "val": "0", "line": 10048}
+  UNHANDLED:{"kind": "if", "cond": {"raw": "%buttonno==0", "logic": null, "terms": [{"var": "%buttonno", "op": "==", "val": "0"}]}, "act": "skip", "line": 10069, "skip": -2}
+缺失目标: ['?']
+无出边块: []
+入度为0的f块 (3): ['f272', 'f415', 'f53']
