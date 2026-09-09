@@ -9,7 +9,8 @@
 import json, re, sys, io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-D = r'C:\Users\ccxxx\Desktop\tsuki_parse'
+import os
+D = os.path.dirname(os.path.abspath(__file__))
 g = json.load(open(D + r'\flow_graph.json', encoding='utf-8'))
 blocks = g['blocks']
 reach = json.load(open(D + r'\reachability.json', encoding='utf-8'))

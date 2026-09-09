@@ -5,10 +5,12 @@
 - 支线 inline: save → 支线(读档) → 主线选项
 """
 import json, re, sys, io
-exec(open(r'C:\Users\ccxxx\Desktop\tsuki_parse\plan_cover.py', encoding='utf-8').read().split("# ---------- 1.")[0])
+import os
+_HERE = os.path.dirname(os.path.abspath(__file__))
+exec(open(os.path.join(_HERE, 'plan_cover.py'), encoding='utf-8').read().split("# ---------- 1.")[0])
 
-D = r'C:\Users\ccxxx\Desktop\tsuki_parse'
-lines = open(r'C:\Users\ccxxx\Desktop\0.txt', encoding='utf-8').read().split('\n')
+D = _HERE
+lines = open(os.path.join(D, '0.txt'), encoding='utf-8').read().split('\n')
 st2 = json.load(open(D + r'\plan_stage2_v3.json', encoding='utf-8'))
 st4 = json.load(open(D + r'\plan_stage4_v3.json', encoding='utf-8'))
 attach = json.load(open(D + r'\attach_v3.json', encoding='utf-8'))
@@ -253,7 +255,9 @@ for i, r in enumerate(runs):
                 news = '、'.join(a['targets'])
                 ln = f'load{sn}'
                 steps_txt = ' → '.join(f"选「{s['pick']}」" for s in a['sels'])
-                if a['stop_block']:
+                if a.get('stop_menu_at'):
+                    tail = f"读完 **{loc_of(a['stop_menu_at'])}**（出现选项时不用选）"
+                elif a.get('stop_block'):
                     tail = f"读到 **{loc_of(a['stop_block'])}** 开头（后面的内容主线/其他支线已覆盖）"
                 else:
                     tail = '一路看到回到标题画面'

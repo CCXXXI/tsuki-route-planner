@@ -4,11 +4,13 @@
   flow_graph.json   - f-block 级别的机器可读分支图
   parse_report.txt  - 解析覆盖情况与异常
 """
+D = os.path.dirname(os.path.abspath(__file__))
 import json, re, sys, io
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-SRC = r'C:\Users\ccxxx\Desktop\0.txt'
+import os
+SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), '0.txt')
 
 with open(SRC, encoding='utf-8') as f:
     lines = f.read().split('\n')
@@ -166,8 +168,8 @@ for name, blk in flow.items():
 report.append('条件变量: ' + json.dumps(cond_vars, ensure_ascii=False, sort_keys=True))
 report.append('赋值变量: ' + json.dumps(set_vars, ensure_ascii=False, sort_keys=True))
 
-with open(r'C:\Users\ccxxx\Desktop\tsuki_flow_raw.json', 'w', encoding='utf-8') as f:
+with open(os.path.join(D, 'tsuki_flow_raw.json'), 'w', encoding='utf-8') as f:
     json.dump(flow, f, ensure_ascii=False, indent=1)
-with open(r'C:\Users\ccxxx\Desktop\parse_report.txt', 'w', encoding='utf-8') as f:
+with open(os.path.join(D, 'parse_report.txt'), 'w', encoding='utf-8') as f:
     f.write('\n'.join(report))
 print('\n'.join(report))

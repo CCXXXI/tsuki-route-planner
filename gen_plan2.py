@@ -5,10 +5,13 @@
 - 支线内部若再有选项, 展开为具体指令 (重跑 detrip 记录内部选择)
 """
 import json, re, sys, io
-exec(open(r'C:\Users\ccxxx\Desktop\tsuki_parse\plan_cover.py', encoding='utf-8').read().split("# ---------- 1.")[0])
+import os
+_HERE = os.path.dirname(os.path.abspath(__file__))
+exec(open(os.path.join(_HERE, 'plan_cover.py'), encoding='utf-8').read().split("# ---------- 1.")[0])
 
-D = r'C:\Users\ccxxx\Desktop\tsuki_parse'
-lines = open(r'C:\Users\ccxxx\Desktop\0.txt', encoding='utf-8').read().split('\n')
+import os
+D = os.path.dirname(os.path.abspath(__file__))
+lines = open(os.path.join(D, '0.txt'), encoding='utf-8').read().split('\n')
 st1 = json.load(open(D + r'\plan_stage1_v2.json', encoding='utf-8'))
 st2 = json.load(open(D + r'\plan_stage2_v2.json', encoding='utf-8'))
 st3 = json.load(open(D + r'\plan_stage3_v2.json', encoding='utf-8'))

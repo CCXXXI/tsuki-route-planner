@@ -6,11 +6,13 @@
   reachability.json   每上下文可达块/场景 + 全集
   witnesses.json      每 (上下文, 块) 一条到达路径 (前驱链压缩为选择列表)
 """
+import os
+D = os.path.dirname(os.path.abspath(__file__))
 import json, re, sys, io, time
 from collections import deque
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-g = json.load(open(r'C:\Users\ccxxx\Desktop\tsuki_parse\flow_graph.json', encoding='utf-8'))
+g = json.load(open(os.path.join(D, 'flow_graph.json'), encoding='utf-8'))
 blocks = g['blocks']
 
 GATE_GLOBALS = ['%cleared', '%clear_ark', '%clear_ciel', '%clear_hisui', '%ark_normalcleared']
@@ -147,7 +149,7 @@ print(f'不可达场景: {sorted(all_scenes - union_scenes)}')
 json.dump({'contexts': {str(k): v for k, v in result.items()},
            'union_blocks': sorted(union_blocks), 'union_scenes': sorted(union_scenes),
            'gate_global_order': GATE_GLOBALS},
-          open(r'C:\Users\ccxxx\Desktop\tsuki_parse\reachability.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+          open(os.path.join(D, 'reachability.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 json.dump({f'{c}|{b}': w for (c, b), w in witness.items()},
-          open(r'C:\Users\ccxxx\Desktop\tsuki_parse\witnesses.json', 'w', encoding='utf-8'), ensure_ascii=False)
+          open(os.path.join(D, 'witnesses.json'), 'w', encoding='utf-8'), ensure_ascii=False)
 print('已保存 reachability.json / witnesses.json')

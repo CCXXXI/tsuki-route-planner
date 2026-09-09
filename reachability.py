@@ -5,11 +5,13 @@
 - flg 钳制到 {0,1}
 - 状态=元组本身, 不存 dict
 """
+import os
+D = os.path.dirname(os.path.abspath(__file__))
 import json, re, sys, io
 from collections import deque
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-g = json.load(open(r'C:\Users\ccxxx\Desktop\tsuki_parse\flow_graph.json', encoding='utf-8'))
+g = json.load(open(os.path.join(D, 'flow_graph.json'), encoding='utf-8'))
 blocks = g['blocks']
 
 GLOBALS = ['%cleared', '%clear_ark', '%clear_ciel', '%clear_akiha', '%clear_hisui', '%clear_kohaku',
@@ -103,5 +105,5 @@ print(f'不可达 f 块 ({len(unreach_f)}): {unreach_f}')
 print(f'不可达场景: {sorted(all_scenes - reach_scenes)}')
 json.dump({'reachable_blocks': sorted(reach_f), 'reachable_scenes': sorted(reach_scenes),
            'unreachable_blocks': unreach_f, 'unreachable_scenes': sorted(all_scenes - reach_scenes)},
-          open(r'C:\Users\ccxxx\Desktop\tsuki_parse\reachability.json', 'w', encoding='utf-8'),
+          open(os.path.join(D, 'reachability.json'), 'w', encoding='utf-8'),
           ensure_ascii=False, indent=1)

@@ -4,9 +4,11 @@ trips -> merge (含覆盖/可执行约束) -> 宽松 attach (所有剩余场景)
 输出 plan_stage1_v3 / plan_stage2_v3 / plan_stage4_v3 / attach_v3.json
 """
 import json, re, sys, io
-exec(open(r'C:\Users\ccxxx\Desktop\tsuki_parse\plan_cover.py', encoding='utf-8').read().split("# ---------- 1.")[0])
+import os
+_HERE = os.path.dirname(os.path.abspath(__file__))
+exec(open(os.path.join(_HERE, 'plan_cover.py'), encoding='utf-8').read().split("# ---------- 1.")[0])
 
-D = r'C:\Users\ccxxx\Desktop\tsuki_parse'
+D = _HERE
 plan10 = json.load(open(D + r'\plan_stage1_v2.json', encoding='utf-8'))['plan']
 reach = json.load(open(D + r'\reachability.json', encoding='utf-8'))
 W = json.load(open(D + r'\witnesses.json', encoding='utf-8'))
@@ -215,7 +217,7 @@ for a in attach:
         grouped[key] = dict(a)
 attach = []
 for a in grouped.values():
-    # 重放该路径求合并后的停止点
+    # 重放该路径: 截断到最后一个目标场景之后的选项, 重算停止点
     B = a['at']
     j = a['pt']
     snap = None
@@ -224,8 +226,26 @@ for a in grouped.values():
     guide = {s2['at']: s2['pick'] for s2 in a['sels']}
     b2, s2x, sn2, sc2, e2 = simulate_full(runs[j]['ctx'], guide, B, snap)
     tset = set(a['targets'])
-    last_idx = max(i2 for i2, bn in enumerate(b2) if blocks[bn]['scene'] in tset)
-    a['stop_block'] = b2[last_idx + 1] if last_idx + 1 < len(b2) else None
+    last_t = max(i2 for i2, bn in enumerate(b2) if blocks[bn]['scene'] in tset)
+    # 选项在场景之后出现: 最后目标场景处的选项无需再选; 只保留之前的
+    idx_of = {}
+    for i2, bn in enumerate(b2): idx_of.setdefault(bn, i2)
+    kept = [s for s in a['sels'] if idx_of.get(s['at'], 10**9) < last_t]
+    a['sels'] = kept
+    a['steps'] = len(kept)
+    # 停止指令类型: menu=最后目标场景后出现选项(不用选) / scene=读到下一场景开头 / title=看到回标题
+    last_blk = blocks[b2[last_t]]
+    has_menu = any(e['kind'] == 'select' or (e['kind'] == 'if' and e['act'] == 'select')
+                   for e in last_blk['branch'])
+    if has_menu:
+        a['stop_block'] = None
+        a['stop_menu_at'] = b2[last_t]
+    elif last_t + 1 < len(b2) and blocks[b2[last_t + 1]]['scene']:
+        a['stop_block'] = b2[last_t + 1]
+        a['stop_menu_at'] = None
+    else:
+        a['stop_block'] = None
+        a['stop_menu_at'] = None
     attach.append(a)
 print(f'合并后支线组数: {len(attach)}')
 

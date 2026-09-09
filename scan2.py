@@ -5,10 +5,12 @@
 - 解析 select 内部条件选择 (if cond select ...)
 - 校验: 每个 f 块是否恰好一个场景、分支目标是否都存在
 """
+D = os.path.dirname(os.path.abspath(__file__))
 import json, re, sys, io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-SRC = r'C:\Users\ccxxx\Desktop\0.txt'
+import os
+SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), '0.txt')
 lines = open(SRC, encoding='utf-8').read().split('\n')
 N = len(lines)
 
@@ -102,6 +104,6 @@ report.append(f's 块内有 flag 写入的: {len(scene_writes)}')
 for k in sorted(scene_writes, key=lambda x: int(x[1:]) if x[1:].isdigit() else 0):
     report.append(f'  {k}: ' + '; '.join(f'L{l} {op} {v} {val}' for l, op, v, val in scene_writes[k]))
 
-open(r'C:\Users\ccxxx\Desktop\tsuki_parse\scan2_report.txt', 'w', encoding='utf-8').write('\n'.join(report))
+open(os.path.join(D, 'scan2_report.txt'), 'w', encoding='utf-8').write('\n'.join(report))
 print('\n'.join(report[:60]))
 print('...' if len(report) > 60 else '')

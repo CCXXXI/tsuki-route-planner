@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """状态空间规模测量: 只做 (block, 关键状态) BFS, 不展开路径"""
+import os
+D = os.path.dirname(os.path.abspath(__file__))
 import json, re, sys, io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-g = json.load(open(r'C:\Users\ccxxx\Desktop\tsuki_parse\flow_graph.json', encoding='utf-8'))
+g = json.load(open(os.path.join(D, 'flow_graph.json'), encoding='utf-8'))
 blocks = g['blocks']
 KEY_VARS = ['%ark_regard', '%ciel_regard', '%akiha_regard', '%hisui_regard', '%kohaku_regard',
             '%flg5', '%flg7', '%flg8', '%flgE', '%flgK', '%flgL', '%flgM', '%flgN', '%flgP', '%flgS',

@@ -1,3 +1,4 @@
+import os
 # -*- coding: utf-8 -*-
 """规划器 v2: 最少周目 + 支线绕路 的全覆盖流程
 输入: reachability.json (32 ctx 可达集), witnesses.json (每 ctx+块 的见证选择列表)
@@ -11,7 +12,8 @@ import json, re, sys, io
 from collections import defaultdict
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-D = r'C:\Users\ccxxx\Desktop\tsuki_parse'
+import os
+D = os.path.dirname(os.path.abspath(__file__))
 g = json.load(open(D + r'\flow_graph.json', encoding='utf-8'))
 blocks = g['blocks']
 reach = json.load(open(D + r'\reachability.json', encoding='utf-8'))

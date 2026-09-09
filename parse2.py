@@ -5,10 +5,12 @@
   flow_graph.json  节点+边 (机器可读)
   校验打印
 """
+D = os.path.dirname(os.path.abspath(__file__))
 import json, re, sys, io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-SRC = r'C:\Users\ccxxx\Desktop\0.txt'
+import os
+SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), '0.txt')
 lines = open(SRC, encoding='utf-8').read().split('\n')
 N = len(lines)
 label_at = {}
@@ -181,7 +183,7 @@ for name, b in blocks.items():
         edges.append({'src': name, 'dst': b['fallthrough'], 'type': 'fallthrough'})
 
 out = {'blocks': blocks, 'edges': edges}
-json.dump(out, open(r'C:\Users\ccxxx\Desktop\tsuki_parse\flow_graph.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+json.dump(out, open(os.path.join(D, 'flow_graph.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 # ---------- 校验 ----------
 rep = []
@@ -200,4 +202,4 @@ dsts = {e['dst'] for e in edges}
 orphans = [n for n in f_names if n not in dsts]
 rep.append(f'入度为0的f块 ({len(orphans)}): {orphans}')
 print('\n'.join(rep))
-open(r'C:\Users\ccxxx\Desktop\tsuki_parse\verify_report.txt', 'w', encoding='utf-8').write('\n'.join(rep))
+open(os.path.join(D, 'verify_report.txt'), 'w', encoding='utf-8').write('\n'.join(rep))

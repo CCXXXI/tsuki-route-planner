@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """栏位生命周期分析 (不改动计划): 每个存档的 [创建, 最后使用] 区间 + 最大并发"""
 import json, sys, io
-D = r'C:\Users\ccxxx\Desktop\tsuki_parse'
+import os
+D = os.path.dirname(os.path.abspath(__file__))
 st2 = json.load(open(D + r'\plan_stage2_v2.json', encoding='utf-8'))
 st4 = json.load(open(D + r'\plan_stage4.json', encoding='utf-8'))
 runs = st4['runs']

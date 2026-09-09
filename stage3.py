@@ -4,9 +4,12 @@
 贪心选覆盖最多剩余场景的 run. 成本 = 选项数 + 新场景数 (已读场景一键跳过).
 """
 import json, re, sys, io
-exec(open(r'C:\Users\ccxxx\Desktop\tsuki_parse\plan_cover.py', encoding='utf-8').read().split("# ---------- 1.")[0])
+import os
+_HERE = os.path.dirname(os.path.abspath(__file__))
+exec(open(os.path.join(_HERE, 'plan_cover.py'), encoding='utf-8').read().split("# ---------- 1.")[0])
 
-D = r'C:\Users\ccxxx\Desktop\tsuki_parse'
+import os
+D = os.path.dirname(os.path.abspath(__file__))
 reach = json.load(open(D + r'\reachability.json', encoding='utf-8'))
 W = json.load(open(D + r'\witnesses.json', encoding='utf-8'))
 st1 = json.load(open(D + r'\plan_stage1.json', encoding='utf-8'))

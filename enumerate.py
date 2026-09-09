@@ -4,11 +4,13 @@ solve(block, state) -> 该状态出发的所有 Pareto 最优结局完成式:
   [(ending, frozenset(suffix_scenes), tuple(suffix_choices))]
 支配规则: 同 ending 下 scenes 为超集者占优.
 """
+import os
+D = os.path.dirname(os.path.abspath(__file__))
 import json, re, sys, io
 sys.setrecursionlimit(100000)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-g = json.load(open(r'C:\Users\ccxxx\Desktop\tsuki_parse\flow_graph.json', encoding='utf-8'))
+g = json.load(open(os.path.join(D, 'flow_graph.json'), encoding='utf-8'))
 blocks = g['blocks']
 
 # 只保留影响分支的变量 (sceneskip/1NNN 与路线无关)
@@ -138,5 +140,5 @@ print(f'memo 状态数: {len(memo)}')
 json.dump([{'ending': e, 'scenes': sorted(s), 'choices': [
     {'at': a, 'pick': p, 'cond': cd} for a, p, cd in ch]}
     for e, s, ch in roots],
-    open(r'C:\Users\ccxxx\Desktop\tsuki_parse\paths.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    open(os.path.join(D, 'paths.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 print('已写出 paths.json')

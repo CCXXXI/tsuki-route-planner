@@ -25,7 +25,8 @@
 | `attach_bukou.py` | （v3 已并入 pipeline_v3）补课→支线 | `attach.json` |
 | `gen_plan3.py` | 渲染最终文档 + 栏位回收 + 全部验证 | `plan3.md` |
 
-\* `witnesses.json`（15MB）未入库：`python reach2.py` 约 5 分钟可重新生成。
+\* `witnesses.json`（15MB）未入库：`python reach2.py` 约 5 分钟可重新生成
+（完整再生成链路：reach2 → pipeline_v3 → gen_plan3）。所有脚本均为仓库相对路径。
 
 ## 关键机制结论（从脚本实证）
 
