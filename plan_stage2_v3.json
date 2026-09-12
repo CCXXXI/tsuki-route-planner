@@ -17,7 +17,11 @@
     "s161",
     "s516"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s107",
+    "s161"
+   ]
   },
   {
    "pt": 0,
@@ -34,7 +38,10 @@
     "s282",
     "s522"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s278"
+   ]
   },
   {
    "pt": 0,
@@ -51,7 +58,12 @@
     "s296",
     "s523"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s289a",
+    "s296",
+    "s523"
+   ]
   },
   {
    "pt": 3,
@@ -68,7 +80,12 @@
     "s396",
     "s528"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s393",
+    "s396",
+    "s528"
+   ]
   },
   {
    "pt": 0,
@@ -83,7 +100,11 @@
     "s511",
     "s86"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s511",
+    "s86"
+   ]
   },
   {
    "pt": 0,
@@ -98,22 +119,11 @@
     "s512",
     "s85"
    ],
-   "how": "terminate"
-  },
-  {
-   "pt": 0,
-   "at": "f116a",
-   "pick": "１、可能是爱尔奎特。",
-   "instead_of": "２、可能是希尔学姐。",
-   "scenes": [
-    "s118",
-    "s125"
-   ],
-   "new": [
-    "s118",
-    "s125"
-   ],
-   "how": "rejoin"
+   "how": "terminate",
+   "disp": [
+    "s512",
+    "s85"
+   ]
   },
   {
    "pt": 0,
@@ -128,7 +138,11 @@
     "s298",
     "s524"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s298",
+    "s524"
+   ]
   },
   {
    "pt": 0,
@@ -143,7 +157,11 @@
     "s301",
     "s525"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s301",
+    "s525"
+   ]
   },
   {
    "pt": 1,
@@ -158,7 +176,11 @@
     "s234",
     "s532"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s234",
+    "s532"
+   ]
   },
   {
    "pt": 1,
@@ -173,7 +195,11 @@
     "s360",
     "s534"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s360",
+    "s534"
+   ]
   },
   {
    "pt": 1,
@@ -188,7 +214,11 @@
     "s364",
     "s535"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s364",
+    "s535"
+   ]
   },
   {
    "pt": 1,
@@ -203,7 +233,11 @@
     "s501",
     "s536"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s501",
+    "s536"
+   ]
   },
   {
    "pt": 1,
@@ -218,7 +252,11 @@
     "s376",
     "s537"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s376",
+    "s537"
+   ]
   },
   {
    "pt": 1,
@@ -233,7 +271,11 @@
     "s379",
     "s538"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s379",
+    "s538"
+   ]
   },
   {
    "pt": 1,
@@ -248,7 +290,11 @@
     "s509",
     "s539"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s509",
+    "s539"
+   ]
   },
   {
    "pt": 1,
@@ -263,7 +309,11 @@
     "s382",
     "s540"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s382",
+    "s540"
+   ]
   },
   {
    "pt": 2,
@@ -278,7 +328,11 @@
     "s122",
     "s127"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s122",
+    "s127"
+   ]
   },
   {
    "pt": 2,
@@ -293,7 +347,11 @@
     "s179",
     "s510"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s179",
+    "s510"
+   ]
   },
   {
    "pt": 2,
@@ -308,7 +366,11 @@
     "s500",
     "s517"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s500",
+    "s517"
+   ]
   },
   {
    "pt": 2,
@@ -323,7 +385,11 @@
     "s186",
     "s518"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s186",
+    "s518"
+   ]
   },
   {
    "pt": 4,
@@ -338,7 +404,11 @@
     "s426",
     "s543"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s426",
+    "s543"
+   ]
   },
   {
    "pt": 4,
@@ -353,7 +423,11 @@
     "s428",
     "s544"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s428",
+    "s544"
+   ]
   },
   {
    "pt": 0,
@@ -366,7 +440,10 @@
    "new": [
     "s25"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s25"
+   ]
   },
   {
    "pt": 0,
@@ -379,7 +456,10 @@
    "new": [
     "s26"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s26"
+   ]
   },
   {
    "pt": 0,
@@ -392,7 +472,10 @@
    "new": [
     "s55"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s55"
+   ]
   },
   {
    "pt": 0,
@@ -405,20 +488,10 @@
    "new": [
     "s56"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 0,
-   "at": "f59",
-   "pick": "１、留在教室吧。",
-   "instead_of": "３、去茶道部露个面吧。",
-   "scenes": [
-    "s62"
-   ],
-   "new": [
-    "s62"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s56"
+   ]
   },
   {
    "pt": 0,
@@ -431,46 +504,10 @@
    "new": [
     "s63"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 0,
-   "at": "f75",
-   "pick": "２、不要，绝对不要帮她。",
-   "instead_of": "１、……帮她吧。",
-   "scenes": [
-    "s77"
-   ],
-   "new": [
-    "s77"
-   ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 0,
-   "at": "f98",
-   "pick": "２、不干。和那种怪物干架的事情我办不来。",
-   "instead_of": "１、可能的话，我还是想拒绝，但―――。",
-   "scenes": [
-    "s96"
-   ],
-   "new": [
-    "s96"
-   ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 0,
-   "at": "f97",
-   "pick": "２、……不，时机未到。",
-   "instead_of": "１、冲向尼禄。",
-   "scenes": [
-    "s99"
-   ],
-   "new": [
-    "s99"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s63"
+   ]
   },
   {
    "pt": 0,
@@ -483,7 +520,10 @@
    "new": [
     "s103"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s103"
+   ]
   },
   {
    "pt": 0,
@@ -496,7 +536,10 @@
    "new": [
     "s220"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s220"
+   ]
   },
   {
    "pt": 0,
@@ -509,33 +552,10 @@
    "new": [
     "s221"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 0,
-   "at": "f222",
-   "pick": "１、……不，那一定是弄错人了。",
-   "instead_of": "２、问问昨晚的事。",
-   "scenes": [
-    "s223"
-   ],
-   "new": [
-    "s223"
-   ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 0,
-   "at": "f225",
-   "pick": "２、好，不吃了。",
-   "instead_of": "１、好，去吃吧。",
-   "scenes": [
-    "s227"
-   ],
-   "new": [
-    "s227"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s221"
+   ]
   },
   {
    "pt": 0,
@@ -548,7 +568,10 @@
    "new": [
     "s131"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s131"
+   ]
   },
   {
    "pt": 0,
@@ -561,7 +584,10 @@
    "new": [
     "s132"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s132"
+   ]
   },
   {
    "pt": 0,
@@ -574,7 +600,10 @@
    "new": [
     "s252"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s252"
+   ]
   },
   {
    "pt": 0,
@@ -587,7 +616,10 @@
    "new": [
     "s257"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s257"
+   ]
   },
   {
    "pt": 0,
@@ -600,7 +632,10 @@
    "new": [
     "s262"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s262"
+   ]
   },
   {
    "pt": 0,
@@ -613,7 +648,10 @@
    "new": [
     "s269"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s269"
+   ]
   },
   {
    "pt": 0,
@@ -626,7 +664,10 @@
    "new": [
     "s275"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s275"
+   ]
   },
   {
    "pt": 0,
@@ -639,7 +680,10 @@
    "new": [
     "s276"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s276"
+   ]
   },
   {
    "pt": 0,
@@ -656,7 +700,10 @@
     "s282",
     "s522"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s280"
+   ]
   },
   {
    "pt": 0,
@@ -669,20 +716,10 @@
    "new": [
     "s286"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 0,
-   "at": "f292",
-   "pick": "２、……仅仅让她把食物放在这里。",
-   "instead_of": "１、不行，不立即阻止琥珀的话",
-   "scenes": [
-    "s294"
-   ],
-   "new": [
-    "s294"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s286"
+   ]
   },
   {
    "pt": 0,
@@ -695,7 +732,10 @@
    "new": [
     "s505"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s505"
+   ]
   },
   {
    "pt": 1,
@@ -708,7 +748,10 @@
    "new": [
     "s29"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s29"
+   ]
   },
   {
    "pt": 1,
@@ -721,7 +764,10 @@
    "new": [
     "s208"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s208"
+   ]
   },
   {
    "pt": 1,
@@ -734,7 +780,10 @@
    "new": [
     "s238"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s238"
+   ]
   },
   {
    "pt": 1,
@@ -747,20 +796,10 @@
    "new": [
     "s239"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 1,
-   "at": "f240",
-   "pick": "２、不能去做这么危险的事。",
-   "instead_of": "１、去寻找弓塚。",
-   "scenes": [
-    "s242"
-   ],
-   "new": [
-    "s242"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s239"
+   ]
   },
   {
    "pt": 1,
@@ -773,7 +812,10 @@
    "new": [
     "s290"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s290"
+   ]
   },
   {
    "pt": 1,
@@ -786,20 +828,10 @@
    "new": [
     "s291"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 1,
-   "at": "f325",
-   "pick": "２、……介绍有彦的事情。",
-   "instead_of": "１、问她为什么转校。",
-   "scenes": [
-    "s327"
-   ],
-   "new": [
-    "s327"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s291"
+   ]
   },
   {
    "pt": 1,
@@ -812,20 +844,10 @@
    "new": [
     "s328"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 1,
-   "at": "f334",
-   "pick": "３、晚饭前都老实呆在这吧。",
-   "instead_of": "１、去客厅。",
-   "scenes": [
-    "s337"
-   ],
-   "new": [
-    "s337"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s328"
+   ]
   },
   {
    "pt": 1,
@@ -838,7 +860,10 @@
    "new": [
     "s342"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s342"
+   ]
   },
   {
    "pt": 1,
@@ -851,7 +876,10 @@
    "new": [
     "s345"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s345"
+   ]
   },
   {
    "pt": 1,
@@ -864,7 +892,10 @@
    "new": [
     "s346"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s346"
+   ]
   },
   {
    "pt": 1,
@@ -877,7 +908,10 @@
    "new": [
     "s349"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s349"
+   ]
   },
   {
    "pt": 1,
@@ -890,7 +924,10 @@
    "new": [
     "s352"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s352"
+   ]
   },
   {
    "pt": 1,
@@ -903,7 +940,10 @@
    "new": [
     "s355"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s355"
+   ]
   },
   {
    "pt": 1,
@@ -916,7 +956,10 @@
    "new": [
     "s357"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s357"
+   ]
   },
   {
    "pt": 1,
@@ -929,7 +972,10 @@
    "new": [
     "s366"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s366"
+   ]
   },
   {
    "pt": 1,
@@ -942,7 +988,10 @@
    "new": [
     "s367"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s367"
+   ]
   },
   {
    "pt": 1,
@@ -955,7 +1004,10 @@
    "new": [
     "s369"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s369"
+   ]
   },
   {
    "pt": 1,
@@ -968,7 +1020,10 @@
    "new": [
     "s372"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s372"
+   ]
   },
   {
    "pt": 2,
@@ -981,7 +1036,10 @@
    "new": [
     "s61"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s61"
+   ]
   },
   {
    "pt": 2,
@@ -994,7 +1052,10 @@
    "new": [
     "s67"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s67"
+   ]
   },
   {
    "pt": 2,
@@ -1007,7 +1068,10 @@
    "new": [
     "s71"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s71"
+   ]
   },
   {
    "pt": 2,
@@ -1020,20 +1084,10 @@
    "new": [
     "s72"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 2,
-   "at": "f81",
-   "pick": "２、……不行。我有不祥的预感。",
-   "instead_of": "１、……没办法。稍微让你看看吧。",
-   "scenes": [
-    "s83"
-   ],
-   "new": [
-    "s83"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s72"
+   ]
   },
   {
    "pt": 2,
@@ -1046,7 +1100,10 @@
    "new": [
     "s110"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s110"
+   ]
   },
   {
    "pt": 2,
@@ -1059,7 +1116,10 @@
    "new": [
     "s111"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s111"
+   ]
   },
   {
    "pt": 2,
@@ -1072,7 +1132,10 @@
    "new": [
     "s114"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s114"
+   ]
   },
   {
    "pt": 2,
@@ -1085,20 +1148,10 @@
    "new": [
     "s115"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 2,
-   "at": "f135",
-   "pick": "１、漫无目的地寻找爱尔奎特。",
-   "instead_of": "２、只好回大宅了。",
-   "scenes": [
-    "s138"
-   ],
-   "new": [
-    "s138"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s115"
+   ]
   },
   {
    "pt": 2,
@@ -1111,7 +1164,10 @@
    "new": [
     "s147"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s147"
+   ]
   },
   {
    "pt": 2,
@@ -1124,7 +1180,10 @@
    "new": [
     "s148"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s148"
+   ]
   },
   {
    "pt": 2,
@@ -1137,7 +1196,10 @@
    "new": [
     "s151"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s151"
+   ]
   },
   {
    "pt": 2,
@@ -1150,20 +1212,10 @@
    "new": [
     "s152"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 2,
-   "at": "f153",
-   "pick": "２、不，不能让任何人知道。",
-   "instead_of": "１、不管怎样，也要对翡翠老实说。",
-   "scenes": [
-    "s155"
-   ],
-   "new": [
-    "s155"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s152"
+   ]
   },
   {
    "pt": 2,
@@ -1180,7 +1232,10 @@
     "s167",
     "s516"
    ],
-   "how": "terminate"
+   "how": "terminate",
+   "disp": [
+    "s167"
+   ]
   },
   {
    "pt": 2,
@@ -1193,7 +1248,10 @@
    "new": [
     "s165"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s165"
+   ]
   },
   {
    "pt": 2,
@@ -1206,7 +1264,10 @@
    "new": [
     "s166"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s166"
+   ]
   },
   {
    "pt": 2,
@@ -1219,20 +1280,10 @@
    "new": [
     "s171"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 2,
-   "at": "f172",
-   "pick": "２、那么，打听一下爱尔奎特的『敌人』的详细情况吧。",
-   "instead_of": "１、好，和她说说昨夜发生的事情。",
-   "scenes": [
-    "s174"
-   ],
-   "new": [
-    "s174"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s171"
+   ]
   },
   {
    "pt": 2,
@@ -1245,20 +1296,10 @@
    "new": [
     "s175"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 2,
-   "at": "f180",
-   "pick": "２、我只是，想要她。",
-   "instead_of": "１、她一定讨厌这样，我不能这么做。",
-   "scenes": [
-    "s182"
-   ],
-   "new": [
-    "s182"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s175"
+   ]
   },
   {
    "pt": 2,
@@ -1271,7 +1312,10 @@
    "new": [
     "s192"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s192"
+   ]
   },
   {
    "pt": 2,
@@ -1284,7 +1328,10 @@
    "new": [
     "s197"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s197"
+   ]
   },
   {
    "pt": 3,
@@ -1297,7 +1344,10 @@
    "new": [
     "s215"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s215"
+   ]
   },
   {
    "pt": 3,
@@ -1310,7 +1360,10 @@
    "new": [
     "s388"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s388"
+   ]
   },
   {
    "pt": 3,
@@ -1323,7 +1376,10 @@
    "new": [
     "s389"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s389"
+   ]
   },
   {
    "pt": 3,
@@ -1336,20 +1392,10 @@
    "new": [
     "s398"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 3,
-   "at": "f399",
-   "pick": "１、叫琥珀做吧。",
-   "instead_of": "２、拜托翡翠试试看。",
-   "scenes": [
-    "s400"
-   ],
-   "new": [
-    "s400"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s398"
+   ]
   },
   {
    "pt": 3,
@@ -1362,7 +1408,10 @@
    "new": [
     "s403"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s403"
+   ]
   },
   {
    "pt": 3,
@@ -1375,20 +1424,10 @@
    "new": [
     "s406"
    ],
-   "how": "rejoin"
-  },
-  {
-   "pt": 4,
-   "at": "f416",
-   "pick": "２、去慎久的房间调查看看。",
-   "instead_of": "１、去会会琥珀。",
-   "scenes": [
-    "s418"
-   ],
-   "new": [
-    "s418"
-   ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s406"
+   ]
   },
   {
    "pt": 4,
@@ -1401,7 +1440,10 @@
    "new": [
     "s421"
    ],
-   "how": "rejoin"
+   "how": "rejoin",
+   "disp": [
+    "s421"
+   ]
   }
  ],
  "remaining": [

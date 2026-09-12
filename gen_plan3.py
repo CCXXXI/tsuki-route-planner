@@ -236,7 +236,7 @@ for i, r in enumerate(runs):
                 st_snap, opts = snaps[at]
                 tgt = next(tg for txt, tg in opts if txt == t['pick'])
                 dsc, inner, how, rej = detrip_full(tgt, st_snap, main_pos, main_pos.get(at, 0))
-                news = '、'.join(t['new'])
+                news = '、'.join(t.get('disp', t['new']))
                 ln = f'load{sn}'
                 if t['how'] == 'terminate':
                     lesson_new = [x for x in t['new'] if re.match(r'^s5\d\d$', x)]
@@ -252,7 +252,7 @@ for i, r in enumerate(runs):
                     rej_txt = f"{rsc}「{rpv}」" if rpv else f"{rsc}"
                     out.append(f"   - 支线：选 **{t['pick']}**{inner_txt} → 读到汇合场景 **{rej_txt}** 开头 → 📂 **{ln}**  （新剧情：{news}）")
             for a in my_detours:
-                news = '、'.join(a['targets'])
+                news = '、'.join(a.get('disp', a['targets']))
                 ln = f'load{sn}'
                 steps_txt = ' → '.join(f"选「{s['pick']}」" for s in a['sels'])
                 if a.get('stop_menu_at'):
@@ -322,7 +322,7 @@ print('栏位事件流验证:', '通过' if ok else '失败')
 open(D + r'\plan3.md', 'w', encoding='utf-8').write('\n'.join(out))
 print(f'plan3.md 生成, {len(out)} 行, 回收后栏位共 {NSLOTS} 个')
 
-# ---- 最终覆盖验证: 只算实际执行的段落 ----
+# ---- 最终覆盖验证: 只算实际执行的段落; 支线按完整途经场景计 ----
 allcov = set()
 for i, r in enumerate(runs):
     _, _, bseq2 = snaps_of2(r['ctx'], r['choices'])
@@ -331,9 +331,9 @@ for i, r in enumerate(runs):
         bseq2 = bseq2[bseq2.index(B):]  # 执行段 = 锚点之后
     for bn in bseq2:
         if blocks[bn]['scene']: allcov.add(blocks[bn]['scene'])
-for t in st2['trips']: allcov |= set(t['new'])
+for t in st2['trips']: allcov |= set(t['scenes'])
 for a in attach:
-    allcov |= set(a['targets'])
+    allcov |= set(a.get('cov', a['targets']))
 reach = json.load(open(D + r'\reachability.json', encoding='utf-8'))
 missing = set(reach['union_scenes']) - allcov
 print('最终覆盖验证 (按实际执行段): 缺失', sorted(missing) if missing else '无 (450/450)')

@@ -227,6 +227,7 @@ for a in grouped.values():
     b2, s2x, sn2, sc2, e2 = simulate_full(runs[j]['ctx'], guide, B, snap)
     tset = set(a['targets'])
     last_t = max(i2 for i2, bn in enumerate(b2) if blocks[bn]['scene'] in tset)
+    a['cov'] = sorted({blocks[bn]['scene'] for bn in b2[:last_t + 1] if blocks[bn]['scene']})
     # 选项在场景之后出现: 最后目标场景处的选项无需再选; 只保留之前的
     idx_of = {}
     for i2, bn in enumerate(b2): idx_of.setdefault(bn, i2)
@@ -249,6 +250,55 @@ for a in grouped.values():
     attach.append(a)
 print(f'合并后支线组数: {len(attach)}')
 
+# ---------- 4. 去重: 支线/绕路的完整途经场景都计入覆盖; 冗余者删 ----------
+# 覆盖源: 周目执行段 + 单选项支线(全程) + 多步支线(截断路径)
+base = set()
+for i, r in enumerate(runs):
+    if r['reuse']:
+        k, j, B = r['reuse']
+        seg = r['bseq'][r['bseq'].index(B):]
+    else:
+        seg = r['bseq']
+    base |= {blocks[bn]['scene'] for bn in seg if blocks[bn]['scene']}
+items = []  # (kind, index, full_scenes, key_scenes)
+for ti, t in enumerate(chosen_trips):
+    items.append(('trip', ti, set(t['scenes']), set(t['new'])))
+for ai, a in enumerate(attach):
+    items.append(('detour', ai, set(a['cov']), set(a['targets'])))
+
+def total_without(drop_idx):
+    tot = set(base)
+    for ii, it in enumerate(items):
+        if ii != drop_idx and it is not None: tot |= it[2]
+    return tot
+
+dropped = []
+changed = True
+while changed:
+    changed = False
+    # 优先删"关键场景少"的 (更可能是顺路品)
+    order = sorted((ii for ii in range(len(items)) if items[ii] is not None),
+                   key=lambda ii: len(items[ii][3]))
+    for ii in order:
+        if items[ii] is None: continue
+        if universe <= total_without(ii):
+            dropped.append(items[ii][:2])
+            items[ii] = None
+            changed = True
+chosen_trips = [t for ti, t in enumerate(chosen_trips) if ('trip', ti) not in dropped]
+attach = [a for ai, a in enumerate(attach) if ('detour', ai) not in dropped]
+print(f'去重删除: {len(dropped)} 条 -> 剩支线 {len(chosen_trips)} + 多步 {len(attach)}')
+
+# 展示用"新剧情"标签: 该条的完整途经场景中, 不在周目主线、也不是其他支线的目标场景
+others_trips = [set(t['new']) for t in chosen_trips]
+others_det = [set(a['targets']) for a in attach]
+for ti, t in enumerate(chosen_trips):
+    o = set().union(*(others_trips[:ti] + others_trips[ti+1:] + others_det)) if (len(chosen_trips) + len(attach)) > 1 else set()
+    t['disp'] = sorted(set(t['scenes']) - base - o)
+for ai, a in enumerate(attach):
+    o = set().union(*(others_det[:ai] + others_det[ai+1:] + others_trips)) if (len(chosen_trips) + len(attach)) > 1 else set()
+    a['disp'] = sorted(set(a['cov']) - base - o)
+
 # 合并同锚点同前缀的支线目标 (展示优化): 同 (pt, at) 且步骤完全相同的归为一组
 json.dump({'plan': plan}, open(D + r'\plan_stage1_v3.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 json.dump({'trips': chosen_trips, 'remaining': sorted(rem)},
@@ -258,9 +308,15 @@ json.dump({'runs': [{'kind': 'pt', 'name': r['ending'], 'ctx': r['ctx'], 'choice
           open(D + r'\plan_stage4_v3.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 json.dump(attach, open(D + r'\attach_v3.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
-# 覆盖验证
+# 覆盖验证 (注意用完整途经场景: cov/scenes, 不是仅目标)
 allcov = set()
-for r in runs: allcov |= set(r['scenes'])
-for t in chosen_trips: allcov |= set(t['new'])
-for a in attach: allcov |= set(a['targets'])
+for i, r in enumerate(runs):
+    if r['reuse']:
+        k, j, B = r['reuse']
+        seg = r['bseq'][r['bseq'].index(B):]
+    else:
+        seg = r['bseq']
+    allcov |= {blocks[bn]['scene'] for bn in seg if blocks[bn]['scene']}
+for t in chosen_trips: allcov |= set(t['scenes'])
+for a in attach: allcov |= set(a['cov'])
 print('覆盖验证:', len(allcov), '/', len(universe), '缺失', sorted(universe - allcov))

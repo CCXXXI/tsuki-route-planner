@@ -24,7 +24,18 @@
   ],
   "stop_block": null,
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s100",
+   "s514",
+   "s97",
+   "s99"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s100",
+   "s514",
+   "s99"
+  ]
  },
  {
   "target": "s140",
@@ -50,7 +61,24 @@
   ],
   "stop_block": "f142",
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s118",
+   "s125",
+   "s129",
+   "s130",
+   "s133",
+   "s135",
+   "s138",
+   "s139",
+   "s140"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s118",
+   "s125",
+   "s138",
+   "s140"
+  ]
  },
  {
   "target": "s144",
@@ -68,7 +96,19 @@
   ],
   "stop_block": "f149",
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s135",
+   "s138",
+   "s139",
+   "s141",
+   "s142",
+   "s144"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s138",
+   "s144"
+  ]
  },
  {
   "target": "s158",
@@ -91,7 +131,19 @@
   ],
   "stop_block": null,
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s153",
+   "s155",
+   "s156",
+   "s158",
+   "s515"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s155",
+   "s158",
+   "s515"
+  ]
  },
  {
   "target": "s177",
@@ -109,7 +161,17 @@
   ],
   "stop_block": "f178",
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s172",
+   "s174",
+   "s176",
+   "s177"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s174",
+   "s177"
+  ]
  },
  {
   "target": "s188",
@@ -144,30 +206,22 @@
   ],
   "stop_block": null,
   "hit_ending": null,
-  "stop_menu_at": null
- },
- {
-  "target": "s230",
-  "targets": [
-   "s230",
-   "s231"
+  "cov": [
+   "s180",
+   "s182",
+   "s183",
+   "s184",
+   "s185",
+   "s187",
+   "s188",
+   "s519"
   ],
-  "pt": 0,
-  "at": "f225",
-  "steps": 2,
-  "sels": [
-   {
-    "at": "f225",
-    "pick": "２、好，不吃了。"
-   },
-   {
-    "at": "f230",
-    "pick": "１、不，那么害羞的事情我可做不来。"
-   }
-  ],
-  "stop_block": "f233",
-  "hit_ending": null,
-  "stop_menu_at": null
+  "stop_menu_at": null,
+  "disp": [
+   "s182",
+   "s188",
+   "s519"
+  ]
  },
  {
   "target": "s232",
@@ -189,7 +243,19 @@
   ],
   "stop_block": "f233",
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s225",
+   "s227",
+   "s228",
+   "s230",
+   "s232"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s227",
+   "s230",
+   "s232"
+  ]
  },
  {
   "target": "s247",
@@ -267,37 +333,58 @@
   ],
   "stop_block": "f249",
   "hit_ending": null,
-  "stop_menu_at": null
- },
- {
-  "target": "s254",
-  "targets": [
-   "s254"
+  "cov": [
+   "s101",
+   "s102",
+   "s104",
+   "s106",
+   "s116a",
+   "s119",
+   "s126",
+   "s129",
+   "s130",
+   "s134",
+   "s200",
+   "s219",
+   "s222",
+   "s223",
+   "s225",
+   "s227",
+   "s228",
+   "s230",
+   "s231",
+   "s233",
+   "s244",
+   "s246",
+   "s247",
+   "s59",
+   "s62",
+   "s65",
+   "s68",
+   "s74",
+   "s75",
+   "s76",
+   "s79",
+   "s80",
+   "s81",
+   "s83",
+   "s88",
+   "s90",
+   "s94",
+   "s96",
+   "s97"
   ],
-  "pt": 0,
-  "at": "f116a",
-  "steps": 4,
-  "sels": [
-   {
-    "at": "f116a",
-    "pick": "１、可能是爱尔奎特。"
-   },
-   {
-    "at": "f129",
-    "pick": "１、出去走廊和她说话。"
-   },
-   {
-    "at": "f244",
-    "pick": "２、虽然学姐讨厌我，我倒是想去问个清楚。"
-   },
-   {
-    "at": "f249",
-    "pick": "１、赶紧回家去吧。"
-   }
-  ],
-  "stop_block": "f256",
-  "hit_ending": null,
-  "stop_menu_at": null
+  "stop_menu_at": null,
+  "disp": [
+   "s223",
+   "s227",
+   "s230",
+   "s231",
+   "s247",
+   "s62",
+   "s83",
+   "s96"
+  ]
  },
  {
   "target": "s263",
@@ -343,7 +430,41 @@
   ],
   "stop_block": "f267",
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s116a",
+   "s118",
+   "s125",
+   "s129",
+   "s130",
+   "s133",
+   "s222",
+   "s223",
+   "s225",
+   "s226",
+   "s228",
+   "s229",
+   "s233",
+   "s244",
+   "s245",
+   "s249",
+   "s250",
+   "s253",
+   "s254",
+   "s256",
+   "s258",
+   "s259",
+   "s260",
+   "s261",
+   "s263"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s118",
+   "s125",
+   "s223",
+   "s254",
+   "s263"
+  ]
  },
  {
   "target": "s265",
@@ -389,7 +510,38 @@
   ],
   "stop_block": "f267",
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s116a",
+   "s119",
+   "s126",
+   "s129",
+   "s130",
+   "s134",
+   "s222",
+   "s223",
+   "s225",
+   "s226",
+   "s228",
+   "s229",
+   "s233",
+   "s244",
+   "s245",
+   "s249",
+   "s251",
+   "s253",
+   "s255",
+   "s256",
+   "s258",
+   "s259",
+   "s260",
+   "s261",
+   "s265"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s223",
+   "s265"
+  ]
  },
  {
   "target": "s289",
@@ -447,7 +599,45 @@
   ],
   "stop_block": "f289a",
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s116a",
+   "s120",
+   "s128",
+   "s129",
+   "s130",
+   "s133",
+   "s244",
+   "s245",
+   "s249",
+   "s250",
+   "s253",
+   "s255",
+   "s256",
+   "s258",
+   "s259",
+   "s260",
+   "s261",
+   "s266",
+   "s267",
+   "s268",
+   "s270",
+   "s271",
+   "s273",
+   "s274",
+   "s277",
+   "s279",
+   "s281",
+   "s283",
+   "s284",
+   "s285",
+   "s287",
+   "s288",
+   "s289"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s289"
+  ]
  },
  {
   "target": "s300",
@@ -473,7 +663,19 @@
   ],
   "stop_block": "f301",
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s292",
+   "s294",
+   "s295",
+   "s297",
+   "s299",
+   "s300"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s294",
+   "s300"
+  ]
  },
  {
   "target": "s314",
@@ -500,7 +702,20 @@
   ],
   "stop_block": null,
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s240",
+   "s242",
+   "s243",
+   "s312",
+   "s314",
+   "s533"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s242",
+   "s314",
+   "s533"
+  ]
  },
  {
   "target": "s332",
@@ -522,7 +737,18 @@
   ],
   "stop_block": "f334",
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s303",
+   "s327",
+   "s329",
+   "s331",
+   "s332"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s327",
+   "s332"
+  ]
  },
  {
   "target": "s341",
@@ -544,7 +770,17 @@
   ],
   "stop_block": "f343",
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s334",
+   "s337",
+   "s338",
+   "s341"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s337",
+   "s341"
+  ]
  },
  {
   "target": "s410",
@@ -570,7 +806,21 @@
   ],
   "stop_block": null,
   "hit_ending": null,
-  "stop_menu_at": "f410"
+  "cov": [
+   "s399",
+   "s400",
+   "s402",
+   "s404",
+   "s405",
+   "s407",
+   "s408",
+   "s410"
+  ],
+  "stop_menu_at": "f410",
+  "disp": [
+   "s400",
+   "s410"
+  ]
  },
  {
   "target": "s424",
@@ -592,7 +842,19 @@
   ],
   "stop_block": "f425",
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s416",
+   "s418",
+   "s419",
+   "s420",
+   "s422",
+   "s424"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s418",
+   "s424"
+  ]
  },
  {
   "target": "s513",
@@ -639,7 +901,31 @@
   ],
   "stop_block": null,
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s513",
+   "s59",
+   "s62",
+   "s65",
+   "s66",
+   "s69",
+   "s70",
+   "s73",
+   "s75",
+   "s77",
+   "s80",
+   "s84",
+   "s87",
+   "s88",
+   "s91",
+   "s92"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s513",
+   "s62",
+   "s77",
+   "s92"
+  ]
  },
  {
   "target": "s529",
@@ -701,6 +987,39 @@
   ],
   "stop_block": null,
   "hit_ending": null,
-  "stop_menu_at": null
+  "cov": [
+   "s211",
+   "s212",
+   "s213",
+   "s216",
+   "s218",
+   "s236",
+   "s243",
+   "s306",
+   "s313",
+   "s315",
+   "s386",
+   "s387",
+   "s390",
+   "s391",
+   "s392",
+   "s394",
+   "s395",
+   "s397",
+   "s399",
+   "s401",
+   "s402",
+   "s404",
+   "s405",
+   "s407",
+   "s408",
+   "s410",
+   "s414",
+   "s529"
+  ],
+  "stop_menu_at": null,
+  "disp": [
+   "s529"
+  ]
  }
 ]
