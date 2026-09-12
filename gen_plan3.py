@@ -11,9 +11,10 @@ exec(open(os.path.join(_HERE, 'plan_cover.py'), encoding='utf-8').read().split("
 
 D = _HERE
 lines = open(os.path.join(D, '0.txt'), encoding='utf-8').read().split('\n')
-st2 = json.load(open(D + r'\plan_stage2_v3.json', encoding='utf-8'))
-st4 = json.load(open(D + r'\plan_stage4_v3.json', encoding='utf-8'))
-attach = json.load(open(D + r'\attach_v3.json', encoding='utf-8'))
+st2 = json.load(open(D + r'\plan_stage2_v4.json', encoding='utf-8'))
+st4 = json.load(open(D + r'\plan_stage4_v4.json', encoding='utf-8'))
+attach = json.load(open(D + r'\attach_v4.json', encoding='utf-8'))
+endtrips = json.load(open(D + r'\endtrips_v4.json', encoding='utf-8'))
 runs = st4['runs']
 
 # 挂载的补课 -> 多步支线, 按 (周目, 锚点块) 分组
@@ -21,6 +22,11 @@ attached = {}
 for a in attach:
     if a['pt'] is not None:
         attached.setdefault((a['pt'], a['at']), []).append(a)
+# 结局支线: 周目中 (post=False) 挂到选项点; 通关后 (post=True) 挂到周目末尾
+endtrip_mid = {}
+endtrip_post = {}
+for et in endtrips:
+    (endtrip_post if et['post'] else endtrip_mid).setdefault(et['pt'], []).append(et)
 
 label_line = {}
 for i, ln in enumerate(lines):
@@ -105,6 +111,8 @@ residuals = [a for a in attach if a['pt'] is None]
 for a in residuals:
     if a.get('load_from'):
         need_save.add(tuple(a['load_from']))
+for et in endtrips:
+    need_save.add((et['pt'], et['at']))
 
 # ---- 栏位回收: 区间着色 ----
 # 事件序号: 每个 run 的开头 load 占一拍, 每个选项点占一拍 (支线 load 与 save 同拍)
@@ -120,6 +128,9 @@ for i, r in enumerate(runs):
             create_seq[(i, at)] = seq
         if (i, at) in trips_by:
             last_use[(i, at)] = seq
+        seq += 1
+    for et in endtrip_post.get(i, []):   # 通关后结局支线: 紧随该周目末尾
+        last_use[(et['pt'], et['at'])] = seq
         seq += 1
 for a in residuals:  # 残余补课在所有周目之后
     if a.get('load_from'):
@@ -227,8 +238,9 @@ for i, r in enumerate(runs):
         step += 1
         my_trips = trips_by.get((i, at), [])
         my_detours = attached.get((i, at), [])
+        my_endtrips = [et for et in endtrip_mid.get(i, []) if et['at'] == at]
         need = (i, at) in need_save
-        if my_trips or my_detours:
+        if my_trips or my_detours or my_endtrips:
             sn = slot_of[(i, at)]
             ov = '（旧档已用完，可覆盖）' if slot_recycled[(i, at)] else ''
             out.append(f"{step}. {loc_of(at)} 出现选项 → 💾 **save{sn}**{ov}")
@@ -262,6 +274,10 @@ for i, r in enumerate(runs):
                 else:
                     tail = '一路看到回到标题画面'
                 out.append(f"   - 支线（{a['steps']} 个选项）：{steps_txt} → {tail} → 📂 **{ln}**  （新剧情：{news}）")
+            for et in my_endtrips:
+                news = '、'.join(et['disp'])
+                steps_txt = ' → '.join(f"选「{s['pick']}」" for s in et['sels'])
+                out.append(f"   - 结局支线：{steps_txt} → 看到 **{ENDING_CN[et['ending']]}** 回标题 → 📂 **load{sn}**  （新剧情：{news}）")
             step += 1
             out.append(f"{step}. 选 **{pick}**（主线继续）")
         elif need:
@@ -270,6 +286,12 @@ for i, r in enumerate(runs):
             out.append(f"{step}. {loc_of(at)} 出现选项 → 💾 **save{sn}**{ov} → 选 **{pick}**")
         else:
             out.append(f"{step}. {loc_of(at)} → 选 **{pick}**")
+    for et in endtrip_post.get(i, []):
+        sn = slot_of[(et['pt'], et['at'])]
+        news = '、'.join(et['disp'])
+        steps_txt = ' → '.join(f"选「{s['pick']}」" for s in et['sels'])
+        out.append(f"\n**通关后收 GE**：📂 **load{sn}**（上面在 {loc_of(et['at'])} 存的档）→ {steps_txt} "
+                   f"→ 看到 **{ENDING_CN[et['ending']]}** 回标题  （新剧情：{news}）")
     out.append('')
 
 out.append('---\n')
@@ -311,6 +333,15 @@ for i, r in enumerate(runs):
             sn = slot_of[(i, at)]
             if content.get(sn) != (i, at):
                 print(f'!! run{i} 支线 load{sn} 内容错误'); ok = False
+        for et in endtrip_mid.get(i, []):
+            if et['at'] == at:
+                sn = slot_of[(i, at)]
+                if content.get(sn) != (i, at):
+                    print(f'!! run{i} 结局支线 load{sn} 内容错误'); ok = False
+    for et in endtrip_post.get(i, []):
+        sn = slot_of[(et['pt'], et['at'])]
+        if content.get(sn) != (et['pt'], et['at']):
+            print(f'!! 通关后支线 load{sn} 内容错误'); ok = False
 for a in residuals:
     if a.get('load_from'):
         key = tuple(a['load_from'])
@@ -334,6 +365,7 @@ for i, r in enumerate(runs):
 for t in st2['trips']: allcov |= set(t['scenes'])
 for a in attach:
     allcov |= set(a.get('cov', a['targets']))
+for et in endtrips: allcov |= set(et['cov'])
 reach = json.load(open(D + r'\reachability.json', encoding='utf-8'))
 missing = set(reach['union_scenes']) - allcov
 print('最终覆盖验证 (按实际执行段): 缺失', sorted(missing) if missing else '无 (450/450)')
