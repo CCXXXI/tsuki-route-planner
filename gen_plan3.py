@@ -222,7 +222,7 @@ out.append('- **开始前：标题 → 选项 → 设置，把第 2 项「场景
 out.append('- `saveN` = 存档到栏位 N；`loadN` = 读取栏位 N。**栏位会被回收复用**（本流程只需 ' + str(NSLOTS) + ' 个栏位）：'
            'load 总是指「最近一次」以该编号存入的存档，每个 load 后面括号里都注明了它的创建位置。'
            '看到提示 `saveN（旧档已用完，可覆盖）` 时放心覆盖。')
-out.append('- 很多周目/补课**不从新游戏开始，而是从之前建的存档继续**——共通部分完全不用重打。')
+out.append('- 每个周目都**从新游戏开始**；路线解锁进度存在系统存档里，不受新游戏影响。')
 out.append('- 有支线的选项点：先 save → 逐条支线（做完 load 回来）→ 最后选主线项。')
 out.append('- 支线终点：标注**汇合场景**的，读到该场景开头就 load 回来；标注 **BAD END** 的看到结局再 load。')
 out.append('- `s123` 是场景编号，`「…」` 是该场景第一句台词，用于对照位置。\n')
@@ -258,7 +258,7 @@ for i, r in enumerate(runs):
             term_dets = [a for a in my_detours if a.get('terminal') and dm]
             norm_trips = [t for t in my_trips if t not in term_trips]
             norm_dets = [a for a in my_detours if a not in term_dets]
-            has_load = bool(norm_trips or norm_dets or my_endtrips)
+            has_load = bool(norm_trips or norm_dets or my_endtrips or (i, at) in endtrip_anchor_set)
             if has_load:
                 sn = slot_of[(i, at)]
                 ov = '（旧档已用完，可覆盖）' if slot_recycled[(i, at)] else ''
@@ -382,6 +382,15 @@ for a in residuals:
         if content.get(sn) != key:
             print(f'!! 残余补课 {a["target"]} load{sn} 内容错误'); ok = False
 print('栏位事件流验证:', '通过' if ok else '失败')
+
+# ---- 文本级验证: 文中每个 loadN 出现前必须有对应的 saveN ----
+seen_save = set()
+for ln in out:
+    for m in re.finditer(r'💾 \*\*save(\d+)\*\*', ln): seen_save.add(m.group(1))
+    for m in re.finditer(r'📂 \*\*load(\d+)\*\*', ln):
+        if m.group(1) not in seen_save:
+            print(f'!! 文本中 load{m.group(1)} 之前没有对应 save: {ln[:60]}'); ok = False
+print('文本 save/load 配对验证:', '通过' if ok else '失败')
 
 open(D + r'\plan3.md', 'w', encoding='utf-8').write('\n'.join(out))
 print(f'plan3.md 生成, {len(out)} 行, 回收后栏位共 {NSLOTS} 个')

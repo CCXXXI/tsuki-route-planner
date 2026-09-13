@@ -169,41 +169,15 @@ snap_pool = {}
 covered_exec = set()
 for i, r in enumerate(runs):
     full_scenes = set(r['scenes'])
-    my_new = full_scenes - covered_exec
-    best = None
-    for k in range(len(r['sels']) - 1, -1, -1):
-        B, _ = r['sels'][k]
-        if B not in snap_pool: continue
-        bpos = r['bseq'].index(B)
-        pre_scenes = {blocks[bn]['scene'] for bn in r['bseq'][:bpos] if blocks[bn]['scene']}
-        if not pre_scenes <= covered_exec: continue
-        for j, snap in snap_pool[B]:
-            st2 = list(snap)
-            for gi in range(NG): st2[gi] = (r['ctx'] >> gi) & 1
-            rem_choices = {at: p for at, p in r['sels'][k:]}
-            b2, s2, sn2, sc2, e2 = simulate_full(r['ctx'], rem_choices, B, tuple(st2))
-            if s2 != r['sels'][k:]: continue
-            if e2 != r['ending']: continue
-            if not my_new <= set(sc2): continue
-            if i in trip_anchor:
-                kept = {at for at, _ in r['sels'][k:]}
-                if not trip_anchor[i] <= kept: continue
-            cand = (k, j, B, set(sc2))
-            if best is None or (k, j) > (best[0], best[1]): best = cand
-    r['reuse'] = best[:3] if best else None
-    k_exec = best[0] if best else 0
-    exec_blocks = {at for at, _ in r['sels'][k_exec:]}
+    r['reuse'] = None  # 全部从新游戏开始: 每个存档只在同一场景组内存活, 栏位需求降为 1
     for B, snap in r['snaps'].items():
-        if B in exec_blocks: snap_pool.setdefault(B, []).append((i, snap))
-    covered_exec |= best[3] if best else full_scenes
+        snap_pool.setdefault(B, []).append((i, snap))
+    covered_exec |= full_scenes
     for t in chosen_trips:
         if t['pt'] == i: covered_exec |= set(t['scenes'])
     for et in endtrips:
         if et['pt'] == i: covered_exec |= set(et['cov'])
-    if best:
-        print(f"run{i} [{r['ending']}]: load run{best[1]} [{runs[best[1]]['ending']}] @{best[2]}, 第 {best[0]+1}/{len(r['sels'])} 选项点起")
-    else:
-        print(f"run{i} [{r['ending']}]: 全新开局")
+    print(f"run{i} [{r['ending']}]: 全新开局")
 
 # ---------- 多步支线 (宽松挂载) ----------
 scene2f = {b['scene']: n for n, b in blocks.items() if b['scene']}
