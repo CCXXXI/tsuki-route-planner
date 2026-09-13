@@ -99,15 +99,25 @@ for t in st2['trips']:
     trips_by.setdefault((t['pt'], t['at']), []).append(t)
 
 # ---- 需要创建的存档: (run_idx, block) ----
+endtrip_anchor_set = {(et['pt'], et['at']) for et in endtrips}
+
+def group_needs_save(i, at):
+    """该选项点是否需要存档: 有要读档的支线/结局支线则存档; drop_main 纯终点组不存档"""
+    if (i, at) in endtrip_anchor_set: return True
+    items = trips_by.get((i, at), []) + attached.get((i, at), [])
+    if not items: return False
+    if (i, at) not in drop_main: return True
+    return any(not x.get('terminal') for x in items)
+
 need_save = set()
 for i, r in enumerate(runs):
     if r['reuse']:
         k, j, B = r['reuse']
         need_save.add((j, B))
 for (pi, at) in trips_by:
-    need_save.add((pi, at))
+    if group_needs_save(pi, at): need_save.add((pi, at))
 for key in attached:
-    need_save.add(key)
+    if group_needs_save(*key): need_save.add(key)
 residuals = [a for a in attach if a['pt'] is None]
 for a in residuals:
     if a.get('load_from'):
@@ -127,7 +137,7 @@ for i, r in enumerate(runs):
     for at, _ in r['sels']:
         if (i, at) in need_save and (i, at) not in create_seq:
             create_seq[(i, at)] = seq
-        if (i, at) in trips_by:
+        if (i, at) in trips_by and group_needs_save(i, at):
             last_use[(i, at)] = seq
         seq += 1
     for et in endtrip_post.get(i, []):   # 通关后结局支线: 紧随该周目末尾
@@ -209,7 +219,7 @@ out = []
 out.append('# 《月姬》全剧情收集流程（存档复用版）\n')
 out.append('## 使用说明\n')
 out.append('- **开始前：标题 → 选项 → 设置，把第 2 项「场景跳过」打开**；已读场景会弹「跳过吗？」选「跳过」即可速推。')
-out.append('- `saveN` = 存档到栏位 N；`loadN` = 读取栏位 N。**栏位会被回收复用**（本流程只需 8 个栏位）：'
+out.append('- `saveN` = 存档到栏位 N；`loadN` = 读取栏位 N。**栏位会被回收复用**（本流程只需 ' + str(NSLOTS) + ' 个栏位）：'
            'load 总是指「最近一次」以该编号存入的存档，每个 load 后面括号里都注明了它的创建位置。'
            '看到提示 `saveN（旧档已用完，可覆盖）` 时放心覆盖。')
 out.append('- 很多周目/补课**不从新游戏开始，而是从之前建的存档继续**——共通部分完全不用重打。')
@@ -241,71 +251,66 @@ for i, r in enumerate(runs):
         my_detours = attached.get((i, at), [])
         my_endtrips = [et for et in endtrip_mid.get(i, []) if et['at'] == at]
         need = (i, at) in need_save
+        dm = (i, at) in drop_main
         if my_trips or my_detours or my_endtrips:
-            sn = slot_of[(i, at)]
-            ov = '（旧档已用完，可覆盖）' if slot_recycled[(i, at)] else ''
-            out.append(f"{step}. {loc_of(at)} 出现选项 → 💾 **save{sn}**{ov}")
-            dm = (i, at) in drop_main
-            # 只有省略主线选项 (drop_main) 时, 终点支线才不读档; 否则全部读档回来到主线选项
+            # drop_main 组的终点支线实质即主线; 其余支线读档回来
             term_trips = [t for t in my_trips if t.get('terminal') and dm]
-            norm_trips = [t for t in my_trips if t not in term_trips]
             term_dets = [a for a in my_detours if a.get('terminal') and dm]
+            norm_trips = [t for t in my_trips if t not in term_trips]
             norm_dets = [a for a in my_detours if a not in term_dets]
-            for t in norm_trips:
-                st_snap, opts = snaps[at]
-                tgt = next(tg for txt, tg in opts if txt == t['pick'])
-                dsc, inner, how, rej = detrip_full(tgt, st_snap, main_pos, main_pos.get(at, 0))
-                news = '、'.join(t.get('disp', t['new']))
-                ln = f'load{sn}'
-                if t['how'] == 'terminate':
-                    lesson_new = [x for x in t['new'] if re.match(r'^s5\d\d$', x)]
-                    pre = [c for c in inner if c['pick'] != '１、是。']
-                    pre_txt = ''.join(f" → 途中选项选「{c['pick']}」" for c in pre)
-                    tail = ('看到 BAD END → 授课邀请选「是」看完授课场景' if lesson_new
-                            else '看到 BAD END（授课邀请选「否」即可）')
-                    out.append(f"   - 支线：选 **{t['pick']}**{pre_txt} → {tail} → 📂 **{ln}**  （新剧情：{news}）")
+            has_load = bool(norm_trips or norm_dets or my_endtrips)
+            if has_load:
+                sn = slot_of[(i, at)]
+                ov = '（旧档已用完，可覆盖）' if slot_recycled[(i, at)] else ''
+                out.append(f"{step}. {loc_of(at)} 出现选项 → 💾 **save{sn}**{ov}")
+                for t in norm_trips:
+                    st_snap, opts = snaps[at]
+                    tgt = next(tg for txt, tg in opts if txt == t['pick'])
+                    dsc, inner, how, rej = detrip_full(tgt, st_snap, main_pos, main_pos.get(at, 0))
+                    news = '、'.join(t.get('disp', t['new']))
+                    ln = f'load{sn}'
+                    if t['how'] == 'terminate':
+                        lesson_new = [x for x in t['new'] if re.match(r'^s5\d\d$', x)]
+                        pre = [c for c in inner if c['pick'] != '１、是。']
+                        pre_txt = ''.join(f" → 途中选项选「{c['pick']}」" for c in pre)
+                        tail = ('看到 BAD END → 授课邀请选「是」看完授课场景' if lesson_new
+                                else '看到 BAD END（授课邀请选「否」即可）')
+                        out.append(f"   - 支线：选 **{t['pick']}**{pre_txt} → {tail} → 📂 **{ln}**  （新剧情：{news}）")
+                    else:
+                        inner_txt = ''.join(f" → 途中选项选「{c['pick']}」" for c in inner)
+                        rsc = blocks[rej]['scene'] if rej else None
+                        rpv = scene_preview(rsc)
+                        rej_txt = f"{rsc}「{rpv}」" if rpv else f"{rsc}"
+                        out.append(f"   - 支线：选 **{t['pick']}**{inner_txt} → 读到汇合场景 **{rej_txt}** 开头 → 📂 **{ln}**  （新剧情：{news}）")
+                for a in norm_dets:
+                    news = '、'.join(a.get('disp', a['targets']))
+                    ln = f'load{sn}'
+                    steps_txt = ' → '.join(f"选「{s['pick']}」" for s in a['sels'])
+                    if a.get('stop_menu_at'):
+                        tail = f"读完 **{loc_of(a['stop_menu_at'])}**（出现选项时不用选）"
+                    elif a.get('stop_block'):
+                        tail = f"读到 **{loc_of(a['stop_block'])}** 开头（后面的内容主线/其他支线已覆盖）"
+                    else:
+                        tail = '一路看到回到标题画面'
+                    out.append(f"   - 支线（{a['steps']} 个选项）：{steps_txt} → {tail} → 📂 **{ln}**  （新剧情：{news}）")
+                for et in my_endtrips:
+                    news = '、'.join(et['disp'])
+                    steps_txt = ' → '.join(f"选「{s['pick']}」" for s in et['sels'])
+                    out.append(f"   - 结局支线：{steps_txt} → 看到 **{ENDING_CN[et['ending']]}** 回标题 → 📂 **load{sn}**  （新剧情：{news}）")
+                step += 1
+            if dm:
+                # 终点支线 = 主线本身: 写成一个普通主线步骤 (同场景已出现选项时不再重复场景名)
+                loc = '' if has_load else f"{loc_of(at)} → "
+                if term_trips:
+                    t = term_trips[0]
+                    news = '、'.join(t.get('disp', t['new']))
+                    out.append(f"{step}. {loc}选 **{t['pick']}**（新剧情：{news}）")
                 else:
-                    inner_txt = ''.join(f" → 途中选项选「{c['pick']}」" for c in inner)
-                    rsc = blocks[rej]['scene'] if rej else None
-                    rpv = scene_preview(rsc)
-                    rej_txt = f"{rsc}「{rpv}」" if rpv else f"{rsc}"
-                    out.append(f"   - 支线：选 **{t['pick']}**{inner_txt} → 读到汇合场景 **{rej_txt}** 开头 → 📂 **{ln}**  （新剧情：{news}）")
-            for a in norm_dets:
-                news = '、'.join(a.get('disp', a['targets']))
-                ln = f'load{sn}'
-                steps_txt = ' → '.join(f"选「{s['pick']}」" for s in a['sels'])
-                if a.get('stop_menu_at'):
-                    tail = f"读完 **{loc_of(a['stop_menu_at'])}**（出现选项时不用选）"
-                elif a.get('stop_block'):
-                    tail = f"读到 **{loc_of(a['stop_block'])}** 开头（后面的内容主线/其他支线已覆盖）"
-                else:
-                    tail = '一路看到回到标题画面'
-                out.append(f"   - 支线（{a['steps']} 个选项）：{steps_txt} → {tail} → 📂 **{ln}**  （新剧情：{news}）")
-            for et in my_endtrips:
-                news = '、'.join(et['disp'])
-                steps_txt = ' → '.join(f"选「{s['pick']}」" for s in et['sels'])
-                out.append(f"   - 结局支线：{steps_txt} → 看到 **{ENDING_CN[et['ending']]}** 回标题 → 📂 **load{sn}**  （新剧情：{news}）")
-            # 终点支线: 不读档, 读完直接继续主线
-            for t in term_trips:
-                st_snap, opts = snaps[at]
-                tgt = next(tg for txt, tg in opts if txt == t['pick'])
-                dsc, inner, how, rej = detrip_full(tgt, st_snap, main_pos, main_pos.get(at, 0))
-                news = '、'.join(t.get('disp', t['new']))
-                inner_txt = ''.join(f" → 途中选项选「{c['pick']}」" for c in inner)
-                rsc = blocks[rej]['scene'] if rej else None
-                rpv = scene_preview(rsc)
-                rej_txt = f"{rsc}「{rpv}」" if rpv else f"{rsc}"
-                out.append(f"   - 支线：选 **{t['pick']}**{inner_txt} → 读到汇合场景 **{rej_txt}** 开头 → "
-                           f"**不读档，直接继续主线**  （新剧情：{news}）")
-            for a in term_dets:
-                news = '、'.join(a.get('disp', a['targets']))
-                steps_txt = ' → '.join(f"选「{s['pick']}」" for s in a['sels'])
-                tail = f"读到 **{loc_of(a['stop_block'])}** 开头" if a.get('stop_block') else '读到支线结束'
-                out.append(f"   - 支线（{a['steps']} 个选项）：{steps_txt} → {tail} → "
-                           f"**不读档，直接继续主线**  （新剧情：{news}）")
-            step += 1
-            if (i, at) in drop_main:
-                out.append(f"{step}. ~~选 {pick}~~ **主线选项跳过**（该侧场景已被其他支线覆盖，随上面的终点支线直接继续）")
+                    a = term_dets[0]
+                    news = '、'.join(a.get('disp', a['targets']))
+                    chain = ' → '.join(f"（{loc_of(s['at'])}）选 **{s['pick']}**" for s in a['sels'][1:])
+                    chain = f" → {chain}" if chain else ''
+                    out.append(f"{step}. {loc}选 **{a['sels'][0]['pick']}**{chain}（新剧情：{news}）")
             else:
                 out.append(f"{step}. 选 **{pick}**（主线继续）")
         elif need:
@@ -357,7 +362,7 @@ for i, r in enumerate(runs):
     for at, _ in r['sels']:
         if (i, at) in need_save:
             content[slot_of[(i, at)]] = (i, at)
-        if (i, at) in trips_by or (i, at) in attached:
+        if group_needs_save(i, at):
             sn = slot_of[(i, at)]
             if content.get(sn) != (i, at):
                 print(f'!! run{i} 支线 load{sn} 内容错误'); ok = False
