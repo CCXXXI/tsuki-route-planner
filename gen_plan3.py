@@ -285,20 +285,19 @@ for i, r in enumerate(runs):
                     out.append(f"   - 结局支线：{steps_txt} → 看到 **{ENDING_CN[et['ending']]}** 回标题 → 📂 **load{tag(sn)}**  （新剧情：{news}）")
                 step += 1
             if dm:
-                # 终点支线 = 主线本身: 写成一个普通主线步骤 (同场景已出现选项时不再重复场景名)
-                loc = '' if has_load else f"{loc_of(at)} → "
+                # 终点支线 = 主线本身: 写成普通主线步骤
                 if term_trips:
                     t = term_trips[0]
                     news = '、'.join(t.get('disp', t['new']))
-                    out.append(f"{step}. {loc}选 **{t['pick']}**（新剧情：{news}）")
+                    out.append(f"{step}. {loc_of(at)} → 选 **{t['pick']}**（新剧情：{news}）")
                 else:
                     a = term_dets[0]
                     news = '、'.join(a.get('disp', a['targets']))
                     chain = ' → '.join(f"（{loc_of(s['at'])}）选 **{s['pick']}**" for s in a['sels'][1:])
                     chain = f" → {chain}" if chain else ''
-                    out.append(f"{step}. {loc}选 **{a['sels'][0]['pick']}**{chain}（新剧情：{news}）")
+                    out.append(f"{step}. {loc_of(at)} → 选 **{a['sels'][0]['pick']}**{chain}（新剧情：{news}）")
             else:
-                out.append(f"{step}. 选 **{pick}**（主线继续）")
+                out.append(f"{step}. {loc_of(at)} → 选 **{pick}**")
         elif need:
             sn = slot_of[(i, at)]
             ov = '（旧档已用完，可覆盖）' if slot_recycled[(i, at)] else ''
