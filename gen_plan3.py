@@ -295,14 +295,12 @@ for i, r in enumerate(runs):
                 # 终点支线 = 主线本身: 写成普通主线步骤
                 if term_trips:
                     t = term_trips[0]
-                    news = '、'.join(t.get('disp', t['new']))
-                    out.append(f"{step}. {loc_of(at)} → 选 **{t['pick']}**（新剧情：{news}）")
+                    out.append(f"{step}. {loc_of(at)} → 选 **{t['pick']}**")
                 else:
                     a = term_dets[0]
-                    news = '、'.join(a.get('disp', a['targets']))
                     chain = ' → '.join(f"（{loc_of(s['at'])}）选 **{s['pick']}**" for s in a['sels'][1:])
                     chain = f" → {chain}" if chain else ''
-                    out.append(f"{step}. {loc_of(at)} → 选 **{a['sels'][0]['pick']}**{chain}（新剧情：{news}）")
+                    out.append(f"{step}. {loc_of(at)} → 选 **{a['sels'][0]['pick']}**{chain}")
             else:
                 out.append(f"{step}. {loc_of(at)} → 选 **{pick}**")
         elif need:
