@@ -34,20 +34,27 @@ for i, ln in enumerate(lines):
     m = re.match(r'^\*([A-Za-z0-9_]+)', ln)
     if m: label_line[m.group(1)] = i
 
-def scene_preview(sname, maxlen=30):
+def scene_preview(sname, maxlen=30, tail=True):
+    """场景台词预览: tail=True 取最后一句 (选项在场景末尾, 末句是玩家选前刚看到的);
+    tail=False 取第一句 (汇合场景/支线停读点要认场景开头)"""
     if not sname or sname not in label_line: return ''
-    for ln in lines[label_line[sname]+1: label_line[sname]+40]:
+    first, last = '', ''
+    for ln in lines[label_line[sname]+1:]:
         s = ln.strip()
-        if not s or s.startswith(';') or s.startswith('*'): continue
+        if s.startswith('*'): break
+        if not s or s.startswith(';'): continue
         if re.match(r'^[a-z!#%$@\\]', s): continue
         s = s.rstrip('\\').strip()
         if len(s) >= 4:
-            return s[:maxlen] + ('…' if len(s) > maxlen else '')
-    return ''
+            if not first: first = s
+            last = s
+    s = last if tail else first
+    if not s: return ''
+    return s[:maxlen] + ('…' if len(s) > maxlen else '')
 
-def loc_of(at):
+def loc_of(at, tail=True):
     sc = blocks[at]['scene']
-    pv = scene_preview(sc)
+    pv = scene_preview(sc, tail=tail)
     return f"{sc}「{pv}」" if pv else (f"{sc}" if sc else f"选项点 {at}")
 
 def detrip_full(start, st, main_pos, min_pos, max_steps=80):
@@ -218,7 +225,7 @@ out.append('- `save` = 存档；`load` = 读取（读的是最近一次 `save` �
 out.append('- 每个周目都**从新游戏开始**；路线解锁进度存在系统存档里，不受新游戏影响。')
 out.append('- 有支线的选项点：先 save → 逐条支线（做完 load 回来）→ 最后选主线项。')
 out.append('- 支线终点：标注**汇合场景**的，读到该场景开头就 load 回来；标注 **BAD END** 的看到结局再 load。')
-out.append('- `s123` 是场景编号，`「…」` 是该场景第一句台词，用于对照位置。\n')
+out.append('- `s123` 是场景编号，`「…」` 是该场景**最后一句**台词（选项弹出前刚看到的那句），用于对照位置；支线「读到某场景开头」处的 `「…」` 则是该场景第一句。\n')
 out.append('---\n')
 
 pt_num = 0
@@ -265,7 +272,7 @@ for i, r in enumerate(runs):
                     else:
                         inner_txt = ''.join(f" → 途中选项选「{c['pick']}」" for c in inner)
                         rsc = blocks[rej]['scene'] if rej else None
-                        rpv = scene_preview(rsc)
+                        rpv = scene_preview(rsc, tail=False)
                         rej_txt = f"{rsc}「{rpv}」" if rpv else f"{rsc}"
                         out.append(f"   - 支线：选 **{t['pick']}**{inner_txt} → 读到汇合场景 **{rej_txt}** 开头 → 📂 **{ln}**  （新剧情：{news}）")
                 for a in norm_dets:
@@ -275,7 +282,7 @@ for i, r in enumerate(runs):
                     if a.get('stop_menu_at'):
                         tail = f"读完 **{loc_of(a['stop_menu_at'])}**（出现选项时不用选）"
                     elif a.get('stop_block'):
-                        tail = f"读到 **{loc_of(a['stop_block'])}** 开头（后面的内容主线/其他支线已覆盖）"
+                        tail = f"读到 **{loc_of(a['stop_block'], tail=False)}** 开头（后面的内容主线/其他支线已覆盖）"
                     else:
                         tail = '一路看到回到标题画面'
                     out.append(f"   - 支线（{a['steps']} 个选项）：{steps_txt} → {tail} → 📂 **{ln}**  （新剧情：{news}）")
