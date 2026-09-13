@@ -329,6 +329,8 @@
     "s127"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f129",
    "disp": [
     "s122",
     "s127"
@@ -473,6 +475,8 @@
     "s55"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f57",
    "disp": [
     "s55"
    ]
@@ -537,6 +541,8 @@
     "s103"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f104",
    "disp": [
     "s103"
    ]
@@ -553,6 +559,8 @@
     "s220"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f222",
    "disp": [
     "s220"
    ]
@@ -585,6 +593,8 @@
     "s131"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f134",
    "disp": [
     "s131"
    ]
@@ -617,6 +627,8 @@
     "s252"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f253",
    "disp": [
     "s252"
    ]
@@ -649,6 +661,8 @@
     "s262"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f264",
    "disp": [
     "s262"
    ]
@@ -665,6 +679,8 @@
     "s269"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f270",
    "disp": [
     "s269"
    ]
@@ -681,6 +697,8 @@
     "s275"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f277",
    "disp": [
     "s275"
    ]
@@ -733,6 +751,8 @@
     "s286"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f287",
    "disp": [
     "s286"
    ]
@@ -749,6 +769,8 @@
     "s505"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f307",
    "disp": [
     "s505"
    ]
@@ -797,6 +819,8 @@
     "s208"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f209",
    "disp": [
     "s208"
    ]
@@ -813,6 +837,8 @@
     "s238"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f240",
    "disp": [
     "s238"
    ]
@@ -845,6 +871,8 @@
     "s290"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f312",
    "disp": [
     "s290"
    ]
@@ -877,6 +905,8 @@
     "s328"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f329",
    "disp": [
     "s328"
    ]
@@ -893,6 +923,8 @@
     "s330"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f333",
    "disp": [
     "s330"
    ]
@@ -909,6 +941,8 @@
     "s342"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f343",
    "disp": [
     "s342"
    ]
@@ -973,6 +1007,8 @@
     "s352"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f353",
    "disp": [
     "s352"
    ]
@@ -989,6 +1025,8 @@
     "s355"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f356",
    "disp": [
     "s355"
    ]
@@ -1069,6 +1107,8 @@
     "s372"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f373",
    "disp": [
     "s372"
    ]
@@ -1085,6 +1125,8 @@
     "s61"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f65",
    "disp": [
     "s61"
    ]
@@ -1101,6 +1143,8 @@
     "s67"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f69",
    "disp": [
     "s67"
    ]
@@ -1117,6 +1161,8 @@
     "s71"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f73",
    "disp": [
     "s71"
    ]
@@ -1149,6 +1195,8 @@
     "s110"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f112",
    "disp": [
     "s110"
    ]
@@ -1213,6 +1261,8 @@
     "s147"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f149",
    "disp": [
     "s147"
    ]
@@ -1245,6 +1295,8 @@
     "s151"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f153",
    "disp": [
     "s151"
    ]
@@ -1297,6 +1349,8 @@
     "s165"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f168",
    "disp": [
     "s165"
    ]
@@ -1329,6 +1383,8 @@
     "s169"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f172",
    "disp": [
     "s169"
    ]
@@ -1377,6 +1433,8 @@
     "s191"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f193",
    "disp": [
     "s191"
    ]
@@ -1409,6 +1467,8 @@
     "s197"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f198",
    "disp": [
     "s197"
    ]
@@ -1444,6 +1504,8 @@
     "s323"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f386",
    "disp": [
     "s323"
    ]
@@ -1460,6 +1522,8 @@
     "s388"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f390",
    "disp": [
     "s388"
    ]
@@ -1492,6 +1556,8 @@
     "s398"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f399",
    "disp": [
     "s398"
    ]
@@ -1508,6 +1574,8 @@
     "s403"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f405",
    "disp": [
     "s403"
    ]
@@ -1524,6 +1592,8 @@
     "s406"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f408",
    "disp": [
     "s406"
    ]
@@ -1540,6 +1610,8 @@
     "s319"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f321",
    "disp": [
     "s319"
    ]
@@ -1556,6 +1628,8 @@
     "s421"
    ],
    "how": "rejoin",
+   "terminal": true,
+   "terminal_stop": "f422",
    "disp": [
     "s421"
    ]

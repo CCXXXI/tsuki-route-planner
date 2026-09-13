@@ -294,7 +294,152 @@ chosen_trips = [t for ti, t in enumerate(chosen_trips) if ('trip', ti) not in dr
 attach = [a for ai, a in enumerate(attach) if ('detour', ai) not in dropped]
 print(f'去重: 删 {len(dropped)} -> 支线 {len(chosen_trips)} + 多步 {len(attach)}')
 
-# 展示标签
+# ---------- 免读档优化: 汇合后状态等价 => 最后一条支线不读档, 主线侧场景另有覆盖则省略主线选项 ----------
+# 全量状态模拟: 记录每个块(应用效果前)的状态
+def simulate_states(ctx_bits, choices, start_block, start_state):
+    st = start_state
+    name = start_block
+    bseq, sels, stmap = [], [], {}
+    ending = None
+    for _ in range(3000):
+        if name in ('endofplay','END','title','title2','title_tochu','gamestart_menu','ending') or name not in blocks:
+            break
+        b = blocks[name]
+        hit = None
+        for e in b['pre']:
+            if e['kind']=='if' and e['act']=='goto' and ev_c(e['cond'], st): hit = e['target']; break
+            if e['kind']=='goto': hit = e['target']; break
+        if hit is not None: name = hit; continue
+        stmap.setdefault(name, st)
+        for e in b['effects']: st = apply(e, st)
+        bseq.append(name)
+        if name in ENDING_BLOCKS: ending = ENDING_BLOCKS[name][0]
+        nxt = None
+        for e in b['branch']:
+            if e['kind']=='select' or (e['kind']=='if' and e['act']=='select' and ev_c(e['cond'], st)):
+                opts = e.get('options', [])
+                pick = choices.get(name)
+                chosen = next((o for o in opts if o['text'].strip()==pick), opts[0] if opts else None)
+                if chosen is None: break
+                sels.append((name, chosen['text'].strip()))
+                nxt = chosen['target']; break
+            if e['kind']=='if' and e['act']=='select': continue
+            if e['kind']=='if' and e['act']=='goto':
+                if ev_c(e['cond'], st): nxt = e['target']; break
+                continue
+            if e['kind']=='goto': nxt = e['target']; break
+            if e['kind']=='end': nxt = 'END'; break
+        if nxt is None: nxt = b['fallthrough'] or 'END'
+        name = nxt
+    return bseq, sels, stmap, ending
+
+def detrip_state(start, st, main_pos, min_pos, max_steps=80):
+    """同 detrip, 但返回 (scenes, how, stop_block, state_at_stop_entry)"""
+    name, cur = start, st
+    scenes = []
+    rejoin_pending = False
+    for _ in range(max_steps):
+        if name in ('endofplay','END','title','title2','title_tochu','gamestart_menu','ending') or name not in blocks:
+            return scenes, 'terminate', None, cur
+        if name in main_pos and main_pos[name] > min_pos:
+            if blocks[name]['scene']: return scenes, 'rejoin', name, cur
+            rejoin_pending = True
+        b = blocks[name]
+        hit = None
+        for e in b['pre']:
+            if e['kind']=='if' and e['act']=='goto' and ev_c(e['cond'], cur): hit = e['target']; break
+            if e['kind']=='goto': hit = e['target']; break
+        if hit is not None: name = hit; continue
+        if b['scene'] and rejoin_pending:
+            return scenes, 'rejoin', name, cur
+        for e in b['effects']: cur = apply(e, cur)
+        if b['scene']: scenes.append(b['scene'])
+        nxt = None
+        for e in b['branch']:
+            if e['kind']=='select' or (e['kind']=='if' and e['act']=='select' and ev_c(e['cond'], cur)):
+                opts = e.get('options', [])
+                if not opts: break
+                nxt = opts[0]['target']; break
+            if e['kind']=='if' and e['act']=='select': continue
+            if e['kind']=='if' and e['act']=='goto':
+                if ev_c(e['cond'], cur): nxt = e['target']; break
+                continue
+            if e['kind']=='goto': nxt = e['target']; break
+            if e['kind']=='end': return scenes, 'terminate', None, cur
+        if nxt is None: nxt = b['fallthrough'] or 'END'
+        name = nxt
+    return scenes, 'overflow', None, cur
+
+def verify_terminal(r, stop_block, st_entry):
+    """从 (stop_block 入口处状态) 用 run 剩余选项模拟, 须逐块复现 run 后半并到达同结局"""
+    pos = r['bseq'].index(stop_block)
+    rem = {a2: p for a2, p in r['sels'] if r['bseq'].index(a2) >= pos}
+    b3, s3, sm3, e3 = simulate_states(r['ctx'], rem, stop_block, st_entry)
+    expected = [(a2, p) for a2, p in r['sels'] if r['bseq'].index(a2) >= pos]
+    return s3 == expected and e3 == r['ending']
+
+# 覆盖池 (判断主线侧场景是否有他处覆盖)
+run_exec = []
+for j, r2 in enumerate(runs):
+    seg = r2['bseq'][r2['bseq'].index(r2['reuse'][2]):] if r2['reuse'] else r2['bseq']
+    run_exec.append({blocks[bn]['scene'] for bn in seg if blocks[bn]['scene']})
+items_pool = set()
+for t in chosen_trips: items_pool |= set(t['scenes'])
+for a in attach: items_pool |= set(a['cov'])
+for et in endtrips: items_pool |= set(et['cov'])
+
+groups = {}
+for t in chosen_trips: groups.setdefault((t['pt'], t['at']), []).append(('trip', t))
+for a in attach: groups.setdefault((a['pt'], a['at']), []).append(('detour', a))
+
+drop_main = {}
+for (i, at), items_g in groups.items():
+    r = runs[i]
+    main_pos = {}
+    for idx, bn in enumerate(r['bseq']): main_pos.setdefault(bn, idx)
+    min_pos = main_pos.get(at, 0)
+    best_term = None
+    for kind, it in items_g:
+        if kind == 'trip':
+            if it['how'] != 'rejoin': continue
+            sc, how, stop_blk, st_stop = detrip_state(
+                next(o['target'] for e in blocks[at]['branch'] if e['kind']=='select'
+                     for o in e['options'] if o['text'].strip() == it['pick']),
+                r['snaps'][at], main_pos, min_pos)
+            if stop_blk is None: continue
+            if stop_blk not in r['bseq']: continue
+            if verify_terminal(r, stop_blk, st_stop):
+                cand = (len(it['scenes']), 'trip', it, stop_blk)
+                if best_term is None or cand[0] > best_term[0]: best_term = cand
+        else:
+            if not it.get('stop_block'): continue  # menu/title 停止的不做终点
+            blk = it['stop_block']
+            if blk not in r['bseq']: continue
+            guide = {s['at']: s['pick'] for s in it['sels']}
+            b2, s2, sm2, e2 = simulate_states(r['ctx'], guide, at, r['snaps'][at])
+            st_stop = sm2.get(blk)
+            if st_stop is None: continue
+            if verify_terminal(r, blk, st_stop):
+                cand = (len(it['cov']), 'detour', it, blk)
+                if best_term is None or cand[0] > best_term[0]: best_term = cand
+    if best_term is None: continue
+    _, kind, it, stop_blk = best_term
+    it['terminal'] = True
+    it['terminal_stop'] = stop_blk
+    # 主线侧场景 = run 主路径上 at 之后、stop_blk 之前的场景
+    pos_a = r['bseq'].index(at)
+    pos_s = r['bseq'].index(stop_blk)
+    main_side = {blocks[bn]['scene'] for bn in r['bseq'][pos_a+1:pos_s] if blocks[bn]['scene']}
+    # 他处覆盖 = 其他周目执行段 ∪ 本周目执行段去掉本段 ∪ 所有支线/结局支线
+    cov_else = items_pool | set().union(*[run_exec[j] for j in range(len(runs)) if j != i]) \
+        | (run_exec[i] - main_side)
+    if main_side <= cov_else:
+        drop_main[(i, at)] = True
+    print(f"组 ({i},{at}): 终点支线={kind} 目标={it.get('new', it.get('targets'))} 免读档✓ 省略主线选项={drop_main.get((i,at), False)} (主线侧 {sorted(main_side)})")
+
+json.dump({'drop_main': [f'{i}|{at}' for i, at in drop_main]},
+          open(D + r'\dropmain_v4.json', 'w', encoding='utf-8'), ensure_ascii=False)
+
 others_trips = [set(t['new']) for t in chosen_trips]
 others_det = [set(a['targets']) for a in attach]
 for ti, t in enumerate(chosen_trips):

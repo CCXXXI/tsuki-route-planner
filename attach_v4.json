@@ -23,6 +23,8 @@
    "s142",
    "s144"
   ],
+  "terminal": true,
+  "terminal_stop": "f149",
   "disp": [
    "s138",
    "s144"
@@ -115,6 +117,8 @@
    "s95",
    "s97"
   ],
+  "terminal": true,
+  "terminal_stop": "f149",
   "disp": [
    "s114",
    "s118",
@@ -146,6 +150,8 @@
    "s176",
    "s177"
   ],
+  "terminal": true,
+  "terminal_stop": "f178",
   "disp": [
    "s174",
    "s177"
@@ -178,6 +184,8 @@
    "s230",
    "s232"
   ],
+  "terminal": true,
+  "terminal_stop": "f233",
   "disp": [
    "s227",
    "s230",
@@ -301,6 +309,8 @@
    "s96",
    "s97"
   ],
+  "terminal": true,
+  "terminal_stop": "f249",
   "disp": [
    "s223",
    "s227",
@@ -464,6 +474,8 @@
    "s261",
    "s265"
   ],
+  "terminal": true,
+  "terminal_stop": "f267",
   "disp": [
    "s223",
    "s245",
@@ -669,6 +681,8 @@
    "s338",
    "s339"
   ],
+  "terminal": true,
+  "terminal_stop": "f343",
   "disp": [
    "s336",
    "s339"
@@ -731,6 +745,8 @@
    "s31",
    "s35"
   ],
+  "terminal": true,
+  "terminal_stop": "f37",
   "disp": [
    "s30",
    "s35"
@@ -803,6 +819,8 @@
    "s422",
    "s424"
   ],
+  "terminal": true,
+  "terminal_stop": "f425",
   "disp": [
    "s418",
    "s424"

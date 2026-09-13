@@ -15,6 +15,7 @@ st2 = json.load(open(D + r'\plan_stage2_v4.json', encoding='utf-8'))
 st4 = json.load(open(D + r'\plan_stage4_v4.json', encoding='utf-8'))
 attach = json.load(open(D + r'\attach_v4.json', encoding='utf-8'))
 endtrips = json.load(open(D + r'\endtrips_v4.json', encoding='utf-8'))
+drop_main = {(int(i2), at2) for i2, at2 in (x.split('|') for x in json.load(open(D + r'\dropmain_v4.json', encoding='utf-8'))['drop_main'])}
 runs = st4['runs']
 
 # 挂载的补课 -> 多步支线, 按 (周目, 锚点块) 分组
@@ -244,7 +245,13 @@ for i, r in enumerate(runs):
             sn = slot_of[(i, at)]
             ov = '（旧档已用完，可覆盖）' if slot_recycled[(i, at)] else ''
             out.append(f"{step}. {loc_of(at)} 出现选项 → 💾 **save{sn}**{ov}")
-            for t in my_trips:
+            dm = (i, at) in drop_main
+            # 只有省略主线选项 (drop_main) 时, 终点支线才不读档; 否则全部读档回来到主线选项
+            term_trips = [t for t in my_trips if t.get('terminal') and dm]
+            norm_trips = [t for t in my_trips if t not in term_trips]
+            term_dets = [a for a in my_detours if a.get('terminal') and dm]
+            norm_dets = [a for a in my_detours if a not in term_dets]
+            for t in norm_trips:
                 st_snap, opts = snaps[at]
                 tgt = next(tg for txt, tg in opts if txt == t['pick'])
                 dsc, inner, how, rej = detrip_full(tgt, st_snap, main_pos, main_pos.get(at, 0))
@@ -263,7 +270,7 @@ for i, r in enumerate(runs):
                     rpv = scene_preview(rsc)
                     rej_txt = f"{rsc}「{rpv}」" if rpv else f"{rsc}"
                     out.append(f"   - 支线：选 **{t['pick']}**{inner_txt} → 读到汇合场景 **{rej_txt}** 开头 → 📂 **{ln}**  （新剧情：{news}）")
-            for a in my_detours:
+            for a in norm_dets:
                 news = '、'.join(a.get('disp', a['targets']))
                 ln = f'load{sn}'
                 steps_txt = ' → '.join(f"选「{s['pick']}」" for s in a['sels'])
@@ -278,8 +285,29 @@ for i, r in enumerate(runs):
                 news = '、'.join(et['disp'])
                 steps_txt = ' → '.join(f"选「{s['pick']}」" for s in et['sels'])
                 out.append(f"   - 结局支线：{steps_txt} → 看到 **{ENDING_CN[et['ending']]}** 回标题 → 📂 **load{sn}**  （新剧情：{news}）")
+            # 终点支线: 不读档, 读完直接继续主线
+            for t in term_trips:
+                st_snap, opts = snaps[at]
+                tgt = next(tg for txt, tg in opts if txt == t['pick'])
+                dsc, inner, how, rej = detrip_full(tgt, st_snap, main_pos, main_pos.get(at, 0))
+                news = '、'.join(t.get('disp', t['new']))
+                inner_txt = ''.join(f" → 途中选项选「{c['pick']}」" for c in inner)
+                rsc = blocks[rej]['scene'] if rej else None
+                rpv = scene_preview(rsc)
+                rej_txt = f"{rsc}「{rpv}」" if rpv else f"{rsc}"
+                out.append(f"   - 支线：选 **{t['pick']}**{inner_txt} → 读到汇合场景 **{rej_txt}** 开头 → "
+                           f"**不读档，直接继续主线**  （新剧情：{news}）")
+            for a in term_dets:
+                news = '、'.join(a.get('disp', a['targets']))
+                steps_txt = ' → '.join(f"选「{s['pick']}」" for s in a['sels'])
+                tail = f"读到 **{loc_of(a['stop_block'])}** 开头" if a.get('stop_block') else '读到支线结束'
+                out.append(f"   - 支线（{a['steps']} 个选项）：{steps_txt} → {tail} → "
+                           f"**不读档，直接继续主线**  （新剧情：{news}）")
             step += 1
-            out.append(f"{step}. 选 **{pick}**（主线继续）")
+            if (i, at) in drop_main:
+                out.append(f"{step}. ~~选 {pick}~~ **主线选项跳过**（该侧场景已被其他支线覆盖，随上面的终点支线直接继续）")
+            else:
+                out.append(f"{step}. 选 **{pick}**（主线继续）")
         elif need:
             sn = slot_of[(i, at)]
             ov = '（旧档已用完，可覆盖）' if slot_recycled[(i, at)] else ''
