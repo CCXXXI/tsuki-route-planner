@@ -110,10 +110,6 @@ def group_needs_save(i, at):
     return any(not x.get('terminal') for x in items)
 
 need_save = set()
-for i, r in enumerate(runs):
-    if r['reuse']:
-        k, j, B = r['reuse']
-        need_save.add((j, B))
 for (pi, at) in trips_by:
     if group_needs_save(pi, at): need_save.add((pi, at))
 for key in attached:
@@ -130,10 +126,6 @@ for et in endtrips:
 create_seq, last_use = {}, {}
 seq = 0
 for i, r in enumerate(runs):
-    if r['reuse']:
-        k, j, B = r['reuse']
-        last_use[(j, B)] = seq
-        seq += 1
     for at, _ in r['sels']:
         if (i, at) in need_save and (i, at) not in create_seq:
             create_seq[(i, at)] = seq
@@ -165,6 +157,8 @@ for key in sorted(need_save, key=lambda x: create_seq[x]):
     slot_of[key] = sn
     heapq.heappush(inuse, (last_use[key], sn))
 NSLOTS = max(slot_of.values())
+# 栏位为 1 时存档不编号
+tag = (lambda sn: '') if NSLOTS == 1 else (lambda sn: str(sn))
 
 # ---- 每个 run 的快照 (重放) ----
 def snaps_of2(ctx_bits, choices):
@@ -216,12 +210,11 @@ for key in sorted(need_save, key=lambda x: create_seq[x]):
     seen_slot.add(sn)
 
 out = []
-out.append('# 《月姬》全剧情收集流程（存档复用版）\n')
+out.append('# 《月姬》全剧情收集流程\n')
 out.append('## 使用说明\n')
 out.append('- **开始前：标题 → 选项 → 设置，把第 2 项「场景跳过」打开**；已读场景会弹「跳过吗？」选「跳过」即可速推。')
-out.append('- `saveN` = 存档到栏位 N；`loadN` = 读取栏位 N。**栏位会被回收复用**（本流程只需 ' + str(NSLOTS) + ' 个栏位）：'
-           'load 总是指「最近一次」以该编号存入的存档，每个 load 后面括号里都注明了它的创建位置。'
-           '看到提示 `saveN（旧档已用完，可覆盖）` 时放心覆盖。')
+out.append('- `save` = 存档；`load` = 读取（读的是最近一次 `save` 存的档）。**全程只用 1 个栏位**，'
+           '看到提示 `save（旧档已用完，可覆盖）` 时放心覆盖。')
 out.append('- 每个周目都**从新游戏开始**；路线解锁进度存在系统存档里，不受新游戏影响。')
 out.append('- 有支线的选项点：先 save → 逐条支线（做完 load 回来）→ 最后选主线项。')
 out.append('- 支线终点：标注**汇合场景**的，读到该场景开头就 load 回来；标注 **BAD END** 的看到结局再 load。')
@@ -234,16 +227,9 @@ for i, r in enumerate(runs):
     snaps, bseq = snaps_of(r)
     main_pos = {}
     for idx, bn in enumerate(bseq): main_pos.setdefault(bn, idx)
-    reuse = r['reuse']
-    if reuse and reuse[0] == 0: reuse = None  # k=0 等于新开
     pt_num += 1
     out.append(f"## 周目 {pt_num}：{ENDING_CN[r['name']]}")
-    if reuse:
-        k, j, B = reuse
-        out.append(f"📂 **load{slot_of[(j, B)]}**（周目{j+1}里在 {loc_of(B)} 存的档），从下面的选项继续：\n")
-        sels = sels[k:]
-    else:
-        out.append('从**新游戏**开始：\n')
+    out.append('从**新游戏**开始：\n')
     step = 0
     for at, pick in sels:
         step += 1
@@ -262,13 +248,13 @@ for i, r in enumerate(runs):
             if has_load:
                 sn = slot_of[(i, at)]
                 ov = '（旧档已用完，可覆盖）' if slot_recycled[(i, at)] else ''
-                out.append(f"{step}. {loc_of(at)} 出现选项 → 💾 **save{sn}**{ov}")
+                out.append(f"{step}. {loc_of(at)} 出现选项 → 💾 **save{tag(sn)}**{ov}")
                 for t in norm_trips:
                     st_snap, opts = snaps[at]
                     tgt = next(tg for txt, tg in opts if txt == t['pick'])
                     dsc, inner, how, rej = detrip_full(tgt, st_snap, main_pos, main_pos.get(at, 0))
                     news = '、'.join(t.get('disp', t['new']))
-                    ln = f'load{sn}'
+                    ln = f'load{tag(sn)}'
                     if t['how'] == 'terminate':
                         lesson_new = [x for x in t['new'] if re.match(r'^s5\d\d$', x)]
                         pre = [c for c in inner if c['pick'] != '１、是。']
@@ -284,7 +270,7 @@ for i, r in enumerate(runs):
                         out.append(f"   - 支线：选 **{t['pick']}**{inner_txt} → 读到汇合场景 **{rej_txt}** 开头 → 📂 **{ln}**  （新剧情：{news}）")
                 for a in norm_dets:
                     news = '、'.join(a.get('disp', a['targets']))
-                    ln = f'load{sn}'
+                    ln = f'load{tag(sn)}'
                     steps_txt = ' → '.join(f"选「{s['pick']}」" for s in a['sels'])
                     if a.get('stop_menu_at'):
                         tail = f"读完 **{loc_of(a['stop_menu_at'])}**（出现选项时不用选）"
@@ -296,7 +282,7 @@ for i, r in enumerate(runs):
                 for et in my_endtrips:
                     news = '、'.join(et['disp'])
                     steps_txt = ' → '.join(f"选「{s['pick']}」" for s in et['sels'])
-                    out.append(f"   - 结局支线：{steps_txt} → 看到 **{ENDING_CN[et['ending']]}** 回标题 → 📂 **load{sn}**  （新剧情：{news}）")
+                    out.append(f"   - 结局支线：{steps_txt} → 看到 **{ENDING_CN[et['ending']]}** 回标题 → 📂 **load{tag(sn)}**  （新剧情：{news}）")
                 step += 1
             if dm:
                 # 终点支线 = 主线本身: 写成一个普通主线步骤 (同场景已出现选项时不再重复场景名)
@@ -316,14 +302,14 @@ for i, r in enumerate(runs):
         elif need:
             sn = slot_of[(i, at)]
             ov = '（旧档已用完，可覆盖）' if slot_recycled[(i, at)] else ''
-            out.append(f"{step}. {loc_of(at)} 出现选项 → 💾 **save{sn}**{ov} → 选 **{pick}**")
+            out.append(f"{step}. {loc_of(at)} 出现选项 → 💾 **save{tag(sn)}**{ov} → 选 **{pick}**")
         else:
             out.append(f"{step}. {loc_of(at)} → 选 **{pick}**")
     for et in endtrip_post.get(i, []):
         sn = slot_of[(et['pt'], et['at'])]
         news = '、'.join(et['disp'])
         steps_txt = ' → '.join(f"选「{s['pick']}」" for s in et['sels'])
-        out.append(f"\n**通关后收 GE**：📂 **load{sn}**（上面在 {loc_of(et['at'])} 存的档）→ {steps_txt} "
+        out.append(f"\n**通关后收 GE**：📂 **load{tag(sn)}**（上面在 {loc_of(et['at'])} 存的档）→ {steps_txt} "
                    f"→ 看到 **{ENDING_CN[et['ending']]}** 回标题  （新剧情：{news}）")
     out.append('')
 
@@ -335,7 +321,7 @@ if residuals:
         out.append(f"### {tgt}「{scene_preview(tgt)}」（新剧情：{'、'.join(a['targets'])}）")
         if a.get('load_from'):
             j, B = a['load_from']
-            out.append(f"📂 **load{slot_of[(j, B)]}**（周目{j+1}里在 {loc_of(B)} 存的档），然后：\n")
+            out.append(f"📂 **load{tag(slot_of[(j, B)])}**（周目{j+1}里在 {loc_of(B)} 存的档），然后：\n")
         else:
             out.append('从**新游戏**开始：\n')
         # 重放取选项序列 (从锚点开始的部分)
@@ -354,11 +340,6 @@ out.append('至此 450/450 个可达场景全部覆盖。')
 content = {}
 ok = True
 for i, r in enumerate(runs):
-    if r['reuse']:
-        k, j, B = r['reuse']
-        sn = slot_of[(j, B)]
-        if content.get(sn) != (j, B):
-            print(f'!! run{i} load{sn} 内容是 {content.get(sn)}, 期望 {(j, B)}'); ok = False
     for at, _ in r['sels']:
         if (i, at) in need_save:
             content[slot_of[(i, at)]] = (i, at)
@@ -383,11 +364,11 @@ for a in residuals:
             print(f'!! 残余补课 {a["target"]} load{sn} 内容错误'); ok = False
 print('栏位事件流验证:', '通过' if ok else '失败')
 
-# ---- 文本级验证: 文中每个 loadN 出现前必须有对应的 saveN ----
+# ---- 文本级验证: 文中每个 load 出现前必须有对应的 save ----
 seen_save = set()
 for ln in out:
-    for m in re.finditer(r'💾 \*\*save(\d+)\*\*', ln): seen_save.add(m.group(1))
-    for m in re.finditer(r'📂 \*\*load(\d+)\*\*', ln):
+    for m in re.finditer(r'💾 \*\*save(\d*)\*\*', ln): seen_save.add(m.group(1))
+    for m in re.finditer(r'📂 \*\*load(\d*)\*\*', ln):
         if m.group(1) not in seen_save:
             print(f'!! 文本中 load{m.group(1)} 之前没有对应 save: {ln[:60]}'); ok = False
 print('文本 save/load 配对验证:', '通过' if ok else '失败')
@@ -399,9 +380,6 @@ print(f'plan3.md 生成, {len(out)} 行, 回收后栏位共 {NSLOTS} 个')
 allcov = set()
 for i, r in enumerate(runs):
     _, _, bseq2 = snaps_of2(r['ctx'], r['choices'])
-    if r['reuse'] and r['reuse'][0] > 0:
-        k, j, B = r['reuse']
-        bseq2 = bseq2[bseq2.index(B):]  # 执行段 = 锚点之后
     for bn in bseq2:
         if blocks[bn]['scene']: allcov.add(blocks[bn]['scene'])
 for t in st2['trips']: allcov |= set(t['scenes'])

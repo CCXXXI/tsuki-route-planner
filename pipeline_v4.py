@@ -169,7 +169,6 @@ snap_pool = {}
 covered_exec = set()
 for i, r in enumerate(runs):
     full_scenes = set(r['scenes'])
-    r['reuse'] = None  # 全部从新游戏开始: 每个存档只在同一场景组内存活, 栏位需求降为 1
     for B, snap in r['snaps'].items():
         snap_pool.setdefault(B, []).append((i, snap))
     covered_exec |= full_scenes
@@ -238,12 +237,7 @@ print(f'多步支线组数: {len(attach)}')
 # ---------- 去重 ----------
 base = set()
 for i, r in enumerate(runs):
-    if r['reuse']:
-        k, j, B = r['reuse']
-        seg = r['bseq'][r['bseq'].index(B):]
-    else:
-        seg = r['bseq']
-    base |= {blocks[bn]['scene'] for bn in seg if blocks[bn]['scene']}
+    base |= {blocks[bn]['scene'] for bn in r['bseq'] if blocks[bn]['scene']}
 for et in endtrips: base |= set(et['cov'])
 
 items = []
@@ -355,8 +349,7 @@ def verify_terminal(r, stop_block, st_entry):
 # 覆盖池 (判断主线侧场景是否有他处覆盖)
 run_exec = []
 for j, r2 in enumerate(runs):
-    seg = r2['bseq'][r2['bseq'].index(r2['reuse'][2]):] if r2['reuse'] else r2['bseq']
-    run_exec.append({blocks[bn]['scene'] for bn in seg if blocks[bn]['scene']})
+    run_exec.append({blocks[bn]['scene'] for bn in r2['bseq'] if blocks[bn]['scene']})
 items_pool = set()
 for t in chosen_trips: items_pool |= set(t['scenes'])
 for a in attach: items_pool |= set(a['cov'])
@@ -434,7 +427,7 @@ print('覆盖验证:', len(allcov), '/', len(universe), '缺失', sorted(univers
 json.dump({'plan': plan}, open(D + r'\plan_stage1_v4.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 json.dump({'trips': chosen_trips}, open(D + r'\plan_stage2_v4.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 json.dump({'runs': [{'kind': 'pt', 'name': r['ending'], 'ctx': r['ctx'], 'choices': r['choices'],
-                     'sels': [list(x) for x in r['sels']], 'reuse': r['reuse']} for r in runs]},
+                     'sels': [list(x) for x in r['sels']]} for r in runs]},
           open(D + r'\plan_stage4_v4.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 json.dump(attach, open(D + r'\attach_v4.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 json.dump(endtrips, open(D + r'\endtrips_v4.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
